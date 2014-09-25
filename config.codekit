@@ -26,6 +26,15 @@
 		"outputStyle": 0,
 		"syntaxCheckerStyle": 1
 		},
+	"\/app\/plugins\/chat\/index.html": {
+		"fileType": 8192,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/app\/plugins\/chat\/index.html",
+		"outputAbbreviatedPath": "No Output Path",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0
+		},
 	"\/assets\/fontawesome\/css\/font-awesome.min.css": {
 		"fileType": 16,
 		"ignore": 0,

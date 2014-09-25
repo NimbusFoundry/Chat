@@ -13,7 +13,9 @@
     config.appName = 'Foundry';
     config.plugins = {
       user: 'core/plugins/user',
-      workspace: 'core/plugins/workspace'
+      workspace: 'core/plugins/workspace',
+      support: 'core/plugins/support',
+      chat: 'app/plugins/chat'
     };
     return config;
   });

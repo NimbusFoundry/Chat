@@ -1,34 +1,49 @@
-<div ng-controller="ChatContorller">
-	<!-- message list  -->
-	<div class="chat-lsit">
-		<ul>
-			<li ng-repeat="message in messages">
-				<p>
-					<span ng-bind="message.userName"></span>
-					<span ng-bind="message.time"></span>
-				</p>
-				<div class="message-content">
-					<p ng-bind="message.content" ng-if="message.content"></p>
-					<p ng-if="message.image">
-						<!-- image template -->
+<div ng-controller="ChatController">
+	<div class="breadcrumb">
+        <h1>Chat Room</h1>
+    </div>
 
-					</p>
-					<p ng-if="message.file">
-						<!-- file template -->
-
-					</p>
+    <div class="container-fluid">
+    	<div class="row-fluid">
+    		<!-- message list  -->
+			<div class="chat-list span8">
+				<div class="list">
+					<div ng-repeat="message in messages" class="msg">
+						<p>
+							<!-- avatar -->
+							<strong ng-bind="message.userName" class="bold"></strong> 
+							<span ng-bind="message.time|utc_date" class="muted"></span>
+						</p>
+						<div class="message-content">
+							<p ng-bind="message.content" ng-if="message.content">
+								
+							</p>
+							<p ng-if="message.image">
+								<!-- image template -->
+							</p>
+							<p ng-if="message.file">
+								<!-- file template -->
+							</p>
+						</div>
+					</div>
 				</div>
-				
-			</li>
-		</ul>
-	</div>
-	<!-- online user list -->
-	<div class="user-list">
-		<ul>
-			<li ng-repeat="user in users">
-				<!-- user list template -->
-				
-			</li>
-		</ul>
-	</div>
+				<div class="send-box">
+					<textarea ng-model="message" id="" cols="30" rows="10">
+						
+					</textarea>
+					<button type="button" ng-click="send()" value="Send">Send</button>
+				</div>
+			</div>
+			<!-- online user list -->
+			<div class="user-list span4">
+				<ul style="list-style:none;">
+					<li ng-repeat="user in users">
+						<!-- user list template -->
+						<img ng-src="{{user.photoUrl}}" alt="">
+						<span ng-bind="user.displayName"></span>
+					</li>
+				</ul>
+			</div>
+    	</div>
+    </div>
 </div>

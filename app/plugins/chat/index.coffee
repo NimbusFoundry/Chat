@@ -1,10 +1,15 @@
 define('chat', ()->
 	name : 'chat'
 	title: 'Chat Room'
-	icon: 'icon-chat'
+	icon: 'icon-comment'
 	type: 'plugin'
+	anchor: '#/chat'
 	init: ()->
-		foundry.initialized(@name)
+		self = @
+		attrs = ['userId', 'userName', 'time', 'image', 'content', 'file']
+		foundry.model('Message', attrs, (model)->
+			foundry.initialized(self.name)
+		)
 		define_controller()
 	inited : ()->
 		console.log 'end'
@@ -13,14 +18,40 @@ define('chat', ()->
 # setup controller
 define_controller = ()->
 	angular.module('foundry').controller('ChatController', [
-		'$scope', ($scope)->
-
+		'$scope', '$filter', ($scope, $filter)->
+			# placeholder
+			$scope.messages = []
+			$scope.message = ''
+			$scope.users = []
+			# model
+			messageModel = foundry._models['Message']
 			# load messages
 			$scope.load = ()->
-				console.log 'load all messages'
+				console.log 'load all messages 20 at first'
+				# filter 20 messages
+				messages = $filter('orderBy')(messageModel.all(),'time', false)
 
+				$scope.messages = messages
+
+				# load users
+				$scope.users = doc.getCollaborators()
 			$scope.send = ()->
 				console.log 'send this'
+
+				return if !$scope.message
+				data = 
+					userId: foundry._current_user.id
+					userName: foundry._current_user.name
+					content: $scope.message
+					time: new Date().getTime()
+				messageModel.create(data)
+
+				$scope.message = ''
+				$scope.load()
+
+			$scope.is_mine_message = (message)->
+				# return if the message belongs to current user or not
+				return message.userId is foundry._current_user.id
 
 			$scope.load()
 

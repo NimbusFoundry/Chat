@@ -6,10 +6,16 @@
     return {
       name: 'chat',
       title: 'Chat Room',
-      icon: 'icon-chat',
+      icon: 'icon-comment',
       type: 'plugin',
+      anchor: '#/chat',
       init: function() {
-        foundry.initialized(this.name);
+        var attrs, self;
+        self = this;
+        attrs = ['userId', 'userName', 'time', 'image', 'content', 'file'];
+        foundry.model('Message', attrs, function(model) {
+          return foundry.initialized(self.name);
+        });
         return define_controller();
       },
       inited: function() {
@@ -20,12 +26,37 @@
 
   define_controller = function() {
     return angular.module('foundry').controller('ChatController', [
-      '$scope', function($scope) {
+      '$scope', '$filter', function($scope, $filter) {
+        var messageModel;
+        $scope.messages = [];
+        $scope.message = '';
+        $scope.users = [];
+        messageModel = foundry._models['Message'];
         $scope.load = function() {
-          return console.log('load all messages');
+          var messages;
+          console.log('load all messages 20 at first');
+          messages = $filter('orderBy')(messageModel.all(), 'time', false);
+          $scope.messages = messages;
+          return $scope.users = doc.getCollaborators();
         };
         $scope.send = function() {
-          return console.log('send this');
+          var data;
+          console.log('send this');
+          if (!$scope.message) {
+            return;
+          }
+          data = {
+            userId: foundry._current_user.id,
+            userName: foundry._current_user.name,
+            content: $scope.message,
+            time: new Date().getTime()
+          };
+          messageModel.create(data);
+          $scope.message = '';
+          return $scope.load();
+        };
+        $scope.is_mine_message = function(message) {
+          return message.userId === foundry._current_user.id;
         };
         return $scope.load();
       }
