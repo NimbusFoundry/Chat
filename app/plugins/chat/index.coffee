@@ -6,7 +6,7 @@ define('chat', ()->
 	anchor: '#/chat'
 	init: ()->
 		self = @
-		attrs = ['userId', 'userName', 'time', 'image', 'content', 'file']
+		attrs = ['userId', 'userName', 'time', 'image', 'content', 'file', 'avatar']
 		foundry.model('Message', attrs, (model)->
 			foundry.initialized(self.name)
 		)
@@ -35,6 +35,13 @@ define_controller = ()->
 
 				# load users
 				users = doc.getCollaborators()
+				$scope.me = null
+				# find me
+				for user in users
+				 	if user.isMe
+				 		$scope.me = user
+				 		break
+
 				# remove same user for different window -todo
 				$scope.collaborators = users
 			$scope.send = ()->
@@ -46,6 +53,7 @@ define_controller = ()->
 					userName: foundry._current_user.name
 					content: $scope.message
 					time: new Date().getTime()
+					avatar: $scope.me.photoUrl
 				messageModel.create(data)
 
 				$scope.message = ''

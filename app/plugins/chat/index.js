@@ -12,7 +12,7 @@
       init: function() {
         var attrs, self;
         self = this;
-        attrs = ['userId', 'userName', 'time', 'image', 'content', 'file'];
+        attrs = ['userId', 'userName', 'time', 'image', 'content', 'file', 'avatar'];
         foundry.model('Message', attrs, function(model) {
           return foundry.initialized(self.name);
         });
@@ -33,11 +33,19 @@
         $scope.collaborators = [];
         messageModel = foundry._models['Message'];
         $scope.load = function() {
-          var messages, users;
+          var messages, user, users, _i, _len;
           console.log('load all messages 20 at first');
           messages = $filter('orderBy')(messageModel.all(), 'time', false);
           $scope.messages = messages;
           users = doc.getCollaborators();
+          $scope.me = null;
+          for (_i = 0, _len = users.length; _i < _len; _i++) {
+            user = users[_i];
+            if (user.isMe) {
+              $scope.me = user;
+              break;
+            }
+          }
           return $scope.collaborators = users;
         };
         $scope.send = function() {
@@ -50,7 +58,8 @@
             userId: foundry._current_user.id,
             userName: foundry._current_user.name,
             content: $scope.message,
-            time: new Date().getTime()
+            time: new Date().getTime(),
+            avatar: $scope.me.photoUrl
           };
           messageModel.create(data);
           $scope.message = '';
