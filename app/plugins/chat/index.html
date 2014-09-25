@@ -1,49 +1,47 @@
+<link rel="stylesheet" href="app/plugins/chat/style.css">
 <div ng-controller="ChatController">
-	<div class="breadcrumb">
+	<!-- <div class="breadcrumb">
         <h1>Chat Room</h1>
     </div>
-
-    <div class="container-fluid">
-    	<div class="row-fluid">
-    		<!-- message list  -->
-			<div class="chat-list span8">
-				<div class="list">
-					<div ng-repeat="message in messages" class="msg">
-						<p>
-							<!-- avatar -->
-							<strong ng-bind="message.userName" class="bold"></strong> 
-							<span ng-bind="message.time|utc_date" class="muted"></span>
-						</p>
-						<div class="message-content">
-							<p ng-bind="message.content" ng-if="message.content">
-								
-							</p>
-							<p ng-if="message.image">
-								<!-- image template -->
-							</p>
-							<p ng-if="message.file">
-								<!-- file template -->
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="send-box">
-					<textarea ng-model="message" id="" cols="30" rows="10">
+ -->
+	<!-- message list  -->
+	<div class="chat-list span8">
+		<div class="list">
+			<div ng-repeat="message in messages" class="msg">
+				<p>
+					<!-- avatar -->
+					<strong ng-bind="message.userName" class="bold"></strong> 
+					<span ng-bind="message.time|utc_date" class="muted"></span>
+				</p>
+				<div class="message-content">
+					<p ng-bind="message.content" ng-if="message.content">
 						
-					</textarea>
-					<button type="button" ng-click="send()" value="Send">Send</button>
+					</p>
+					<p ng-if="message.image">
+						<!-- image template -->
+					</p>
+					<p ng-if="message.file">
+						<!-- file template -->
+					</p>
 				</div>
 			</div>
-			<!-- online user list -->
-			<div class="user-list span4">
-				<ul style="list-style:none;">
-					<li ng-repeat="user in users">
-						<!-- user list template -->
-						<img ng-src="{{user.photoUrl}}" alt="" style="max-width: 50px;">
-						<span ng-bind="user.displayName"></span>
-					</li>
-				</ul>
-			</div>
-    	</div>
-    </div>
+		</div>
+		<div class="send-box">
+			<textarea ng-model="message">
+				
+			</textarea>
+			<button type="button" ng-click="send()" value="Send">Send</button>
+		</div>
+	</div>
+	<!-- online user list -->
+	<div class="user-list span4">
+		<ul style="list-style:none;">
+			<li ng-repeat="user in collaborators">
+				<!-- user list template -->
+				<img ng-src="{{user.photoUrl}}" alt="" style="max-width: 50px;">
+				<span ng-bind="user.displayName"></span>
+			</li>
+		</ul>
+	</div>
+    	
 </div>

@@ -1,0 +1,28 @@
+.chat-list, .user-list{
+	position: absolute;
+	height: 100%;
+}
+
+.chat-list .send-box{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+}
+
+.chat-list .send-box textarea{
+	height: 100%;
+	padding: 0px;
+	border-radius: 0px ;
+	width: 90%;
+}
+.chat-list .send-box button{
+	height: 100%;
+	border: none;
+	background: #6cb800;
+	color: #eee;
+}
+
+.user-list{
+	right: 0;
+}

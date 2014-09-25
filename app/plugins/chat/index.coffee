@@ -22,7 +22,7 @@ define_controller = ()->
 			# placeholder
 			$scope.messages = []
 			$scope.message = ''
-			$scope.users = []
+			$scope.collaborators = []
 			# model
 			messageModel = foundry._models['Message']
 			# load messages
@@ -36,7 +36,7 @@ define_controller = ()->
 				# load users
 				users = doc.getCollaborators()
 				# remove same user for different window -todo
-				$scope.users = user
+				$scope.collaborators = users
 			$scope.send = ()->
 				console.log 'send this'
 

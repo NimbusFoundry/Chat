@@ -30,7 +30,7 @@
         var loadUser, messageModel;
         $scope.messages = [];
         $scope.message = '';
-        $scope.users = [];
+        $scope.collaborators = [];
         messageModel = foundry._models['Message'];
         $scope.load = function() {
           var messages, users;
@@ -38,7 +38,7 @@
           messages = $filter('orderBy')(messageModel.all(), 'time', false);
           $scope.messages = messages;
           users = doc.getCollaborators();
-          return $scope.users = user;
+          return $scope.collaborators = users;
         };
         $scope.send = function() {
           var data;
