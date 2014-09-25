@@ -6,7 +6,7 @@ define('chat', ()->
 	anchor: '#/chat'
 	init: ()->
 		self = @
-		attrs = ['userId', 'userName', 'time', 'image', 'content', 'file', 'avatar']
+		attrs = ['userId', 'userName', 'ts', 'image', 'content', 'file', 'avatar']
 		foundry.model('Message', attrs, (model)->
 			foundry.initialized(self.name)
 		)
@@ -52,7 +52,7 @@ define_controller = ()->
 					userId: foundry._current_user.id
 					userName: foundry._current_user.name
 					content: $scope.message
-					time: new Date().getTime()
+					ts: new Date().getTime()
 					avatar: $scope.me.photoUrl
 				messageModel.create(data)
 

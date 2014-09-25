@@ -10,11 +10,9 @@
 			<div class="chat-list span8">
 				<div class="list">
 					<div ng-repeat="message in messages" class="msg">
-						<p>
-							<!-- avatar -->
-							<strong ng-bind="message.userName" class="bold"></strong> 
-							<span ng-bind="message.time|utc_date" class="muted"></span>
-						</p>
+						<div class="avatar">
+							<img ng-src="{{msg.avatar || 'photo.jpg'}}" alt="">
+						</div>
 						<div class="message-content">
 							<p ng-bind="message.content" ng-if="message.content">
 								
@@ -25,7 +23,12 @@
 							<p ng-if="message.file">
 								<!-- file template -->
 							</p>
+							<p class="muted">
+								<strong ng-bind="message.userName" class="bold"></strong> •
+								<span ng-bind="message.ts|date:'MM-dd HH:mm'"></span>
+							</p>
 						</div>
+
 					</div>
 				</div>
 				<div class="send-box">

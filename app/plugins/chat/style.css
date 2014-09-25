@@ -24,7 +24,7 @@
 
 .chat-list .send-box textarea{
 	height: 50px;
-	padding: 0px;
+	padding: 5px;
 	border-radius: 0px ;
 	width: 80%;
 	margin-bottom: 0px;
@@ -39,7 +39,22 @@
 }
 
 .chat-list .list, .user-list ul{
-	margin-top: 66px;
+	margin-top: 75px;
+}
+
+.chat-list .list .avatar{
+	display: inline-block;
+}
+.chat-list .list .avatar{
+	vertical-align: top;
+	position: absolute;
+}
+.chat-list .list .message-content{
+	margin-left: 70px;
+}
+.chat-list .list .avatar img{
+	max-width: 50px;
+	border-radius: 25px;
 }
 
 .user-list{
@@ -47,5 +62,5 @@
 }
 
 .user-list ul>li{
-	padding: 10px 0px;
+	padding: 0px 0px 10px 0px;
 }
