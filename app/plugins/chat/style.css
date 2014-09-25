@@ -3,6 +3,14 @@
 	height: 100%;
 }
 
+.chat-list{
+	width: 75%;
+}
+
+.chat-list .list{
+	margin: 10px 15px;
+}
+
 .chat-list .send-box{
 	position: absolute;
 	bottom: 0;
@@ -15,14 +23,22 @@
 	padding: 0px;
 	border-radius: 0px ;
 	width: 90%;
+	margin-bottom: 0px;
+	margin-left: 10px;
 }
 .chat-list .send-box button{
 	height: 100%;
 	border: none;
-	background: #6cb800;
+	background: #1ea083;
 	color: #eee;
+	padding: 0px 20px;
 }
 
 .user-list{
 	right: 0;
+	width: 25%;
+}
+
+.user-list ul>li{
+	padding: 10px 0px;
 }
