@@ -1,0 +1,34 @@
+<div ng-controller="ChatContorller">
+	<!-- message list  -->
+	<div class="chat-lsit">
+		<ul>
+			<li ng-repeat="message in messages">
+				<p>
+					<span ng-bind="message.userName"></span>
+					<span ng-bind="message.time"></span>
+				</p>
+				<div class="message-content">
+					<p ng-bind="message.content" ng-if="message.content"></p>
+					<p ng-if="message.image">
+						<!-- image template -->
+
+					</p>
+					<p ng-if="message.file">
+						<!-- file template -->
+
+					</p>
+				</div>
+				
+			</li>
+		</ul>
+	</div>
+	<!-- online user list -->
+	<div class="user-list">
+		<ul>
+			<li ng-repeat="user in users">
+				<!-- user list template -->
+				
+			</li>
+		</ul>
+	</div>
+</div>
