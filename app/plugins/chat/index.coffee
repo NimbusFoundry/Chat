@@ -34,7 +34,9 @@ define_controller = ()->
 				$scope.messages = messages
 
 				# load users
-				$scope.users = doc.getCollaborators()
+				users = doc.getCollaborators()
+				# remove same user for different window -todo
+				$scope.users = user
 			$scope.send = ()->
 				console.log 'send this'
 
@@ -52,6 +54,16 @@ define_controller = ()->
 			$scope.is_mine_message = (message)->
 				# return if the message belongs to current user or not
 				return message.userId is foundry._current_user.id
+
+			# user join or left event
+			loadUser = (evt)->
+				console.log evt
+				$scope.users = doc.getCollaborators()
+				$scope.$apply()
+
+			# add event for user
+			doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
+			doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
 
 			$scope.load()
 

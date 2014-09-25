@@ -27,17 +27,18 @@
   define_controller = function() {
     return angular.module('foundry').controller('ChatController', [
       '$scope', '$filter', function($scope, $filter) {
-        var messageModel;
+        var loadUser, messageModel;
         $scope.messages = [];
         $scope.message = '';
         $scope.users = [];
         messageModel = foundry._models['Message'];
         $scope.load = function() {
-          var messages;
+          var messages, users;
           console.log('load all messages 20 at first');
           messages = $filter('orderBy')(messageModel.all(), 'time', false);
           $scope.messages = messages;
-          return $scope.users = doc.getCollaborators();
+          users = doc.getCollaborators();
+          return $scope.users = user;
         };
         $scope.send = function() {
           var data;
@@ -58,6 +59,13 @@
         $scope.is_mine_message = function(message) {
           return message.userId === foundry._current_user.id;
         };
+        loadUser = function(evt) {
+          console.log(evt);
+          $scope.users = doc.getCollaborators();
+          return $scope.$apply();
+        };
+        doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
+        doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
         return $scope.load();
       }
     ]);
