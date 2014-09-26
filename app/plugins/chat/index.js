@@ -32,6 +32,12 @@
         $scope.message = '';
         $scope.collaborators = [];
         messageModel = foundry._models['Message'];
+        messageModel.onUpdate(function(mode, obj, isLocal) {
+          $scope.load();
+          if (!isLocal) {
+            return $scope.$apply();
+          }
+        });
         $scope.load = function() {
           var messages, user, users, _i, _len;
           console.log('load all messages 20 at first');

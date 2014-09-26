@@ -25,6 +25,11 @@ define_controller = ()->
 			$scope.collaborators = []
 			# model
 			messageModel = foundry._models['Message']
+			messageModel.onUpdate((mode, obj, isLocal)->
+				$scope.load()
+				if !isLocal
+		          $scope.$apply()
+			)
 			# load messages
 			$scope.load = ()->
 				console.log 'load all messages 20 at first'
