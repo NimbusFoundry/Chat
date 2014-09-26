@@ -26,7 +26,7 @@
 
   define_controller = function() {
     return angular.module('foundry').controller('ChatController', [
-      '$scope', '$filter', function($scope, $filter) {
+      '$scope', '$filter', '$timeout', function($scope, $filter, $timeout) {
         var loadUser, messageModel, sync_collaborators;
         $scope.messages = [];
         $scope.message = '';
@@ -57,10 +57,12 @@
             }
           }
           sync_collaborators();
-          $('.list').css({
-            'max-height': $('.chat-list').height() - 150
-          });
-          $('.list').scrollTop($('.list')[0].scrollHeight);
+          $timeout(function() {
+            $('.list').css({
+              'max-height': $('.chat-list').height() - 150
+            });
+            return $('.list').scrollTop($('.list')[0].scrollHeight);
+          }, 0);
         };
         $scope.send = function() {
           var data, now;

@@ -18,7 +18,7 @@ define('chat', ()->
 # setup controller
 define_controller = ()->
 	angular.module('foundry').controller('ChatController', [
-		'$scope', '$filter', ($scope, $filter)->
+		'$scope', '$filter', '$timeout', ($scope, $filter, $timeout)->
 			# placeholder
 			$scope.messages = []
 			$scope.message = ''
@@ -52,8 +52,11 @@ define_controller = ()->
 
 				sync_collaborators()
 				# adjust the height
-				$('.list').css({'max-height': $('.chat-list').height()-150})
-				$('.list').scrollTop($('.list')[0].scrollHeight)
+				$timeout(()->
+					$('.list').css({'max-height': $('.chat-list').height()-150})
+					$('.list').scrollTop($('.list')[0].scrollHeight)
+				, 0)
+				
 				return
 			$scope.send = ()->
 				console.log 'send this'
