@@ -32,14 +32,21 @@
 	bottom: 10px;
 	width: 100%;
 }
-
+.chat-list .send-box .send-container{
+	width: 100%;
+	padding-right: 75px;
+	box-sizing: border-box;
+	padding-left: 15px;
+	overflow: hidden;
+}
 .chat-list .send-box textarea{
-	height: 50px;
+	height: 62px;
 	padding: 5px;
-	border-radius: 0px ;
-	width: 80%;
+	border-radius: 0px;
+	width: 100%;
 	margin-bottom: 0px;
-	margin-left: 10px;
+	box-sizing: border-box;
+	display: block;
 }
 .chat-list .send-box button{
 	height: 62px;
@@ -47,6 +54,9 @@
 	background: #1ea083;
 	color: #eee;
 	padding: 0px 20px;
+	position: absolute;
+	top: 0;
+	right: 2px;
 }
 
 .chat-list .send-box button:focus{
