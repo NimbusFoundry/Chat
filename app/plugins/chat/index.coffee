@@ -30,6 +30,13 @@ define_controller = ()->
 				if !isLocal
 		          $scope.$apply()
 			)
+
+			sync_collaborators = ()->
+				users = doc.getCollaborators()
+
+				# remove same user for different window -todo
+				$scope.collaborators = users
+
 			# load messages
 			$scope.load = ()->
 				console.log 'load all messages 20 at first'
@@ -46,9 +53,7 @@ define_controller = ()->
 				 	if user.isMe
 				 		$scope.me = user
 				 		break
-
-				# remove same user for different window -todo
-				$scope.collaborators = users
+				
 				# adjust the height
 				$('.list').css({'max-height': $('.chat-list').height()-150})
 				return
@@ -77,7 +82,7 @@ define_controller = ()->
 			# user join or left event
 			loadUser = (evt)->
 				console.log evt
-				$scope.users = doc.getCollaborators()
+				sync_collaborators()
 				$scope.$apply()
 
 			# add event for user

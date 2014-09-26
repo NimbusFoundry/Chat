@@ -27,7 +27,7 @@
   define_controller = function() {
     return angular.module('foundry').controller('ChatController', [
       '$scope', '$filter', function($scope, $filter) {
-        var loadUser, messageModel;
+        var loadUser, messageModel, sync_collaborators;
         $scope.messages = [];
         $scope.message = '';
         $scope.collaborators = [];
@@ -38,6 +38,11 @@
             return $scope.$apply();
           }
         });
+        sync_collaborators = function() {
+          var users;
+          users = doc.getCollaborators();
+          return $scope.collaborators = users;
+        };
         $scope.load = function() {
           var messages, user, users, _i, _len;
           console.log('load all messages 20 at first');
@@ -52,7 +57,6 @@
               break;
             }
           }
-          $scope.collaborators = users;
           $('.list').css({
             'max-height': $('.chat-list').height() - 150
           });
@@ -81,7 +85,7 @@
         };
         loadUser = function(evt) {
           console.log(evt);
-          $scope.users = doc.getCollaborators();
+          sync_collaborators();
           return $scope.$apply();
         };
         doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
