@@ -12,7 +12,7 @@
       init: function() {
         var attrs, self;
         self = this;
-        attrs = ['userId', 'userName', 'ts', 'image', 'content', 'file', 'avatar'];
+        attrs = ['userId', 'userName', 'ts', 'image', 'content', 'file', 'avatar', 'local'];
         foundry.model('Message', attrs, function(model) {
           return foundry.initialized(self.name);
         });
@@ -69,7 +69,8 @@
             userName: foundry._current_user.name,
             content: $scope.message,
             ts: now.getTime() + now.getTimezoneOffset() * 60000,
-            avatar: $scope.me.photoUrl
+            avatar: $scope.me.photoUrl,
+            local: now.getTime()
           };
           messageModel.create(data);
           $scope.message = '';

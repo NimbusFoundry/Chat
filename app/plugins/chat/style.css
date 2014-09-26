@@ -102,7 +102,7 @@
 }
 
 .chat-list .list .mine .message-content .content:after{
-	right: -12px;
+	right: -14px;
 	border-left: 7px solid #ddd;
 	top: 10px;
 }
