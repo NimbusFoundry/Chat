@@ -39,10 +39,8 @@ define_controller = ()->
 
 			# load messages
 			$scope.load = ()->
-				console.log 'load all messages 20 at first'
 				# filter 20 messages
-				messages = $filter('orderBy')(messageModel.all(), 'ts', false)
-
+				messages = $filter('orderBy')(messageModel.all(), 'local', false)
 				$scope.messages = messages
 
 				$scope.me = null
@@ -51,10 +49,11 @@ define_controller = ()->
 				 	if user.isMe
 				 		$scope.me = user
 				 		break
-				 		
+
 				sync_collaborators()
 				# adjust the height
 				$('.list').css({'max-height': $('.chat-list').height()-150})
+				$('.list').scrollTop($('.list')[0].scrollHeight)
 				return
 			$scope.send = ()->
 				console.log 'send this'

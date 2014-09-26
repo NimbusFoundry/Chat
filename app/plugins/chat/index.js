@@ -45,8 +45,7 @@
         };
         $scope.load = function() {
           var messages, user, _i, _len, _ref;
-          console.log('load all messages 20 at first');
-          messages = $filter('orderBy')(messageModel.all(), 'ts', false);
+          messages = $filter('orderBy')(messageModel.all(), 'local', false);
           $scope.messages = messages;
           $scope.me = null;
           _ref = doc.getCollaborators();
@@ -61,6 +60,7 @@
           $('.list').css({
             'max-height': $('.chat-list').height() - 150
           });
+          $('.list').scrollTop($('.list')[0].scrollHeight);
         };
         $scope.send = function() {
           var data, now;
