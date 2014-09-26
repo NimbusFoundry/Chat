@@ -44,19 +44,20 @@
           return $scope.collaborators = users;
         };
         $scope.load = function() {
-          var messages, user, users, _i, _len;
+          var messages, user, _i, _len, _ref;
           console.log('load all messages 20 at first');
           messages = $filter('orderBy')(messageModel.all(), 'ts', false);
           $scope.messages = messages;
-          users = doc.getCollaborators();
           $scope.me = null;
-          for (_i = 0, _len = users.length; _i < _len; _i++) {
-            user = users[_i];
+          _ref = doc.getCollaborators();
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            user = _ref[_i];
             if (user.isMe) {
               $scope.me = user;
               break;
             }
           }
+          sync_collaborators();
           $('.list').css({
             'max-height': $('.chat-list').height() - 150
           });

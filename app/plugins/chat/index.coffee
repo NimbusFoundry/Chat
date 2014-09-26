@@ -45,15 +45,14 @@ define_controller = ()->
 
 				$scope.messages = messages
 
-				# load users
-				users = doc.getCollaborators()
 				$scope.me = null
 				# find me
-				for user in users
+				for user in doc.getCollaborators()
 				 	if user.isMe
 				 		$scope.me = user
 				 		break
-				
+				 		
+				sync_collaborators()
 				# adjust the height
 				$('.list').css({'max-height': $('.chat-list').height()-150})
 				return
