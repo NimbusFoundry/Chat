@@ -11,7 +11,7 @@
 				<div class="list">
 					<div ng-repeat="message in messages" class="msg">
 						<div class="avatar">
-							<img ng-src="{{msg.avatar || 'photo.jpg'}}" alt="">
+							<img ng-src="{{message.avatar || 'photo.jpg'}}" alt="">
 						</div>
 						<div class="message-content">
 							<p ng-bind="message.content" ng-if="message.content">
