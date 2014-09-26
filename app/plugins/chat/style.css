@@ -1,8 +1,16 @@
 .absolute{
 	position: absolute;
 	width: 100%!important;
+	z-index: 2;
+	border-bottom: 1px solid #ddd;
+	padding: 0!important;
+	margin: 0;
+	height: 60px!important;
 }
-
+.absolute h1{
+	margin: 10px;
+	display: block;
+}
 .chat-list, .user-list{
 	position: absolute;
 	height: 100%;
@@ -14,6 +22,9 @@
 
 .chat-list .list{
 	margin: 10px 15px;
+	position: relative;
+	max-height: 550px;
+	overflow: scroll;
 }
 
 .chat-list .send-box{
@@ -38,6 +49,10 @@
 	padding: 0px 20px;
 }
 
+.chat-list .send-box button:focus{
+	outline: none;
+}
+
 .chat-list .list, .user-list ul{
 	margin-top: 75px;
 }
@@ -52,6 +67,32 @@
 .chat-list .list .message-content{
 	margin-left: 70px;
 }
+.chat-list .list .message-content .content{
+	border-radius: 3px;
+	border: 1px solid #eee;
+	background: #fff;
+	padding: 5px 10px;
+	display: inline-block;
+}
+.chat-list .list .mine .avatar{
+	right: 15px;
+}
+.chat-list .list .mine .message-content{
+	overflow: hidden;
+	margin-left: 0px;
+	margin-right: 85px;
+}
+
+.chat-list .list .mine .message-content .content{
+	float: right;
+	display: block;
+}
+
+.chat-list .list .mine .muted{
+	float: right;
+	clear: both;
+}
+
 .chat-list .list .avatar img{
 	max-width: 50px;
 	border-radius: 25px;
@@ -59,8 +100,13 @@
 
 .user-list{
 	right: 0;
+	background: #fff;
 }
-
+.user-list ul{
+	list-style: none;
+	margin-left: 10px;
+	padding-top: 15px;
+}
 .user-list ul>li{
 	padding: 0px 0px 10px 0px;
 }

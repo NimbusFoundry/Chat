@@ -9,12 +9,12 @@
 			<!-- message list  -->
 			<div class="chat-list span8">
 				<div class="list">
-					<div ng-repeat="message in messages" class="msg">
+					<div ng-repeat="message in messages" class="msg" ng-class="{mine:is_mine_message(message)}">
 						<div class="avatar">
 							<img ng-src="{{message.avatar || 'photo.jpg'}}" alt="">
 						</div>
 						<div class="message-content">
-							<p ng-bind="message.content" ng-if="message.content">
+							<p ng-bind="message.content" class="content" ng-if="message.content">
 								
 							</p>
 							<p ng-if="message.image">
