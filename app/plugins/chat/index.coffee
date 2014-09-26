@@ -34,7 +34,7 @@ define_controller = ()->
 			$scope.load = ()->
 				console.log 'load all messages 20 at first'
 				# filter 20 messages
-				messages = $filter('orderBy')(messageModel.all(),'time', false)
+				messages = $filter('orderBy')(messageModel.all(), 'ts', false)
 
 				$scope.messages = messages
 
@@ -56,11 +56,13 @@ define_controller = ()->
 				console.log 'send this'
 
 				return if !$scope.message
+				now = new Date()
+
 				data = 
 					userId: foundry._current_user.id
 					userName: foundry._current_user.name
 					content: $scope.message
-					ts: new Date().getTime()
+					ts: now.getTime() + now.getTimezoneOffset()*60000
 					avatar: $scope.me.photoUrl
 				messageModel.create(data)
 

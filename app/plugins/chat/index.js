@@ -41,7 +41,7 @@
         $scope.load = function() {
           var messages, user, users, _i, _len;
           console.log('load all messages 20 at first');
-          messages = $filter('orderBy')(messageModel.all(), 'time', false);
+          messages = $filter('orderBy')(messageModel.all(), 'ts', false);
           $scope.messages = messages;
           users = doc.getCollaborators();
           $scope.me = null;
@@ -58,16 +58,17 @@
           });
         };
         $scope.send = function() {
-          var data;
+          var data, now;
           console.log('send this');
           if (!$scope.message) {
             return;
           }
+          now = new Date();
           data = {
             userId: foundry._current_user.id,
             userName: foundry._current_user.name,
             content: $scope.message,
-            ts: new Date().getTime(),
+            ts: now.getTime() + now.getTimezoneOffset() * 60000,
             avatar: $scope.me.photoUrl
           };
           messageModel.create(data);

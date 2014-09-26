@@ -66,7 +66,9 @@
 .chat-list .list, .user-list ul{
 	margin-top: 75px;
 }
-
+.chat-list .list .msg{
+	padding-bottom: 15px;
+}
 .chat-list .list .avatar{
 	display: inline-block;
 }
@@ -83,7 +85,33 @@
 	background: #fff;
 	padding: 5px 10px;
 	display: inline-block;
+	position: relative;
 }
+.chat-list .list .message-content .content:before,
+.chat-list .list .mine .content:after{
+	position: absolute;
+	display: inline-block;
+	border-top: 7px solid transparent;
+	border-right: 7px solid #ddd;
+	border-bottom: 7px solid transparent;
+	border-right-color: #fff;
+	content: '';
+}
+.chat-list .list .message-content .content:before{
+	left: -7px;
+}
+
+.chat-list .list .mine .message-content .content:after{
+	right: -12px;
+	border-left: 7px solid #ddd;
+	top: 10px;
+}
+
+.chat-list .list .mine .message-content .content:before{
+	border: none;
+	display: none;
+}
+
 .chat-list .list .mine .avatar{
 	right: 15px;
 }
