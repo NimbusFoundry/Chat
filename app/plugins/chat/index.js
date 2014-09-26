@@ -52,7 +52,10 @@
               break;
             }
           }
-          return $scope.collaborators = users;
+          $scope.collaborators = users;
+          $('.list').css({
+            'max-height': $('.chat-list').height() - 150
+          });
         };
         $scope.send = function() {
           var data;
@@ -84,6 +87,12 @@
         return $scope.load();
       }
     ]);
+  };
+
+  window.onresize = function() {
+    return $('.list').css({
+      'max-height': $('.chat-list').height() - 150
+    });
   };
 
 }).call(this);

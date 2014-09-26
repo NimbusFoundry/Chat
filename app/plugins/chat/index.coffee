@@ -49,6 +49,9 @@ define_controller = ()->
 
 				# remove same user for different window -todo
 				$scope.collaborators = users
+				# adjust the height
+				$('.list').css({'max-height': $('.chat-list').height()-150})
+				return
 			$scope.send = ()->
 				console.log 'send this'
 
@@ -81,3 +84,6 @@ define_controller = ()->
 			$scope.load()
 
 	])
+
+window.onresize = ()->
+	$('.list').css({'max-height': $('.chat-list').height()-150})
