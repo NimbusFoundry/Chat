@@ -87,7 +87,7 @@
           return message.userId === foundry._current_user.id;
         };
         loadUser = function(evt) {
-          console.log(evt);
+          console.log(evt.type);
           sync_collaborators();
           return $scope.$apply();
         };

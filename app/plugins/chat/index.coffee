@@ -82,9 +82,10 @@ define_controller = ()->
 
 			# user join or left event
 			loadUser = (evt)->
-				console.log evt
+				console.log evt.type
 				sync_collaborators()
 				$scope.$apply()
+
 
 			# add event for user
 			doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
