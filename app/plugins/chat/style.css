@@ -21,22 +21,25 @@
 }
 
 .chat-list .list{
-	margin: 10px 15px;
+	margin: 0px;
 	position: relative;
 	max-height: 550px;
 	overflow: scroll;
+	padding: 20px 20px;
+	padding-bottom: 0px;
+	overflow-x: hidden;
 }
 
 .chat-list .send-box{
 	position: absolute;
-	bottom: 10px;
+	bottom: 0px;
 	width: 100%;
 }
 .chat-list .send-box .send-container{
 	width: 100%;
 	padding-right: 75px;
 	box-sizing: border-box;
-	padding-left: 15px;
+	padding-left: 0px;
 	overflow: hidden;
 }
 .chat-list .send-box textarea{
@@ -64,7 +67,7 @@
 }
 
 .chat-list .list, .user-list ul{
-	margin-top: 75px;
+	margin-top: 60px;
 }
 .chat-list .list .msg{
 	padding-bottom: 15px;
@@ -146,4 +149,8 @@
 }
 .user-list ul>li{
 	padding: 0px 0px 10px 0px;
+}
+
+.page-wrap {
+	background: #fff;
 }
