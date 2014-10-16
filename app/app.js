@@ -10,7 +10,7 @@
   define('config', function() {
     var config;
     config = {};
-    config.appName = 'Foundry';
+    config.appName = 'Chat';
     config.plugins = {
       user: 'core/plugins/user',
       workspace: 'core/plugins/workspace',
