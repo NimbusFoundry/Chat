@@ -32,6 +32,8 @@
 	top: 0px;
 	bottom: 0px;
 	margin-bottom: 62px;
+	background-color: #f1f1f1;
+	width: 97%;
 }
 
 .chat-list .send-box{
