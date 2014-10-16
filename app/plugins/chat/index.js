@@ -62,7 +62,7 @@
               'max-height': $('.chat-list').height() - 150
             });
             return $('.list').scrollTop($('.list')[0].scrollHeight);
-          }, 0);
+          }, 500);
         };
         $scope.send = function() {
           var data, now;

@@ -55,7 +55,7 @@ define_controller = ()->
 				$timeout(()->
 					$('.list').css({'max-height': $('.chat-list').height()-150})
 					$('.list').scrollTop($('.list')[0].scrollHeight)
-				, 0)
+				, 500)
 				
 				return
 			$scope.send = ()->
