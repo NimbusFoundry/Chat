@@ -32,7 +32,7 @@ define_controller = ()->
 			)
 
 			sync_collaborators = ()->
-				users = doc.getCollaborators()
+				users = Nimbus.realtime.doc.getCollaborators()
 
 				# remove same user for different window -todo
 				$scope.collaborators = users
@@ -45,7 +45,7 @@ define_controller = ()->
 
 				$scope.me = null
 				# find me
-				for user in doc.getCollaborators()
+				for user in Nimbus.realtime.doc.getCollaborators()
 				 	if user.isMe
 				 		$scope.me = user
 				 		break
@@ -88,8 +88,8 @@ define_controller = ()->
 
 
 			# add event for user
-			doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
-			doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
+			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
+			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
 
 			$scope.load()
 

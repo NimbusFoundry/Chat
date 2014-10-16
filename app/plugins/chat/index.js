@@ -40,7 +40,7 @@
         });
         sync_collaborators = function() {
           var users;
-          users = doc.getCollaborators();
+          users = Nimbus.realtime.doc.getCollaborators();
           return $scope.collaborators = users;
         };
         $scope.load = function() {
@@ -48,7 +48,7 @@
           messages = $filter('orderBy')(messageModel.all(), 'local', false);
           $scope.messages = messages;
           $scope.me = null;
-          _ref = doc.getCollaborators();
+          _ref = Nimbus.realtime.doc.getCollaborators();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             user = _ref[_i];
             if (user.isMe) {
@@ -91,8 +91,8 @@
           sync_collaborators();
           return $scope.$apply();
         };
-        doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
-        doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
+        Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
+        Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
         return $scope.load();
       }
     ]);
