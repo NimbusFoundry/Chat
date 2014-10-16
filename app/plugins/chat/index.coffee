@@ -52,10 +52,10 @@ define_controller = ()->
 
 				sync_collaborators()
 				# adjust the height
-				$timeout(()->
-					$('.list').css({'max-height': $('.chat-list').height()-150})
-					$('.list').scrollTop($('.list')[0].scrollHeight)
-				, 0)
+				#$timeout(()->
+				#	$('.list').css({'max-height': $('.chat-list').height()-160})
+				#	$('.list').scrollTop($('.list')[0].scrollHeight)
+				#, 100)
 				
 				return
 			$scope.send = ()->
@@ -95,5 +95,5 @@ define_controller = ()->
 
 	])
 
-window.onresize = ()->
-	$('.list').css({'max-height': $('.chat-list').height()-150})
+#window.onresize = ()->
+#	$('.list').css({'max-height': $('.chat-list').height()-150})

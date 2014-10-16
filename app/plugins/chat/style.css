@@ -22,12 +22,16 @@
 
 .chat-list .list{
 	margin: 0px;
-	position: relative;
-	max-height: 550px;
+	position: absolute;
 	overflow: scroll;
 	padding: 20px 20px;
 	padding-bottom: 0px;
 	overflow-x: hidden;
+	display: block;
+	padding-bottom: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin-bottom: 62px;
 }
 
 .chat-list .send-box{
