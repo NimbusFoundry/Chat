@@ -41,8 +41,10 @@
 				</div>
 			</div>
 			<!-- online user list -->
-			<div class="user-list span4">
+			<div class="user-list span4" style="margin-top: 10px;">
+				
 				<ul style="list-style:none;">
+					<p style="font-weight: bold; color: #777;">Current people: </p>
 					<li ng-repeat="user in collaborators|orderBy:'displayName'">
 						<!-- user list template -->
 						<img ng-src="{{user.photoUrl}}" alt="" style="max-width: 50px;">
