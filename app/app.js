@@ -28,6 +28,10 @@
       'key': '696230129324-k4g89ugcu02k5obu9hs1u5tp3e54n02u.apps.googleusercontent.com',
       "scope": "openid https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/plus.me"
     },
+    "Firebase": {
+      key: 'amber-torch-4018',
+      app_name: 'Foundry'
+    },
     "app_name": "Foundry",
     'synchronous': false
   });
@@ -50,11 +54,11 @@
 
   $(document).ready(function() {
     $('#google_login').on('click', function(evt) {
-      if (!(localStorage["version"] === "google")) {
-        localStorage["version"] = "google";
-        window.location.reload();
-      }
-      return Nimbus.Auth.authorize('GDrive');
+      Nimbus.Auth.authorize('Firebase', {
+        'email' : 'luojieyy@gmail.com',
+        'password': 'luojie123',
+        'provider': 'password'
+      });
     });
     $('.logout_btn').on('click', function(evt) {
       foundry.logout();
