@@ -5825,18 +5825,29 @@
     realtimeEvents = [];
     this.cloudcache = {};
 
+    var _workspaceId = ''
+
     /*
       1. try get firebase workspace root
       2. set server as the pool node for workspace
       3. should be called again when the workspace is changed
      */
     base._setup = function() {
-      return server = root = Nimbus.Firebase.server;
+      root = Nimbus.Firebase.server;
+      if (workspaceId) {
+        server = root.child(workspaceId+'/pool')
+      }else{
+        server = root;
+      };
     };
+    
     base.set_workspace = function(id) {
       var workspacePool;
-      workspacePool = id + '/pool';
-      return server = root.child(workspacePool);
+      workspaceId = id;
+      if (root) {
+        workspacePool = id + '/pool';
+        server = root.child(workspacePool);
+      }
     };
 
     /*
@@ -6069,7 +6080,11 @@
         Nimbus.realtime.c_file = workspace;
         Nimbus.realtime.app_files = workspaces;
         self.watch_workspace(workspace.id);
-        return self.bind_workspace(workspace.id);
+        self.bind_workspace(workspace.id);
+
+        if(callback){
+          callback();
+        }
       });
       localStorage['state'] = 'Working';
 
@@ -6119,13 +6134,17 @@
         server.onAuth(function(authData) {
           if (authData) {
             console.log('success', authData);
-            self.init_workspace();
+            self.init_workspace(function(){
+              self.auth_callback(authData);
+              Nimbus.Auth.app_ready = true;
+              Nimbus.Auth.app_ready_func();  
+            });
           } else {
             console.log('failed');
+            self.auth_callback(authData);
+            Nimbus.Auth.app_ready = true;
+            Nimbus.Auth.app_ready_func();
           }
-          self.auth_callback(authData);
-          Nimbus.Auth.app_ready = true;
-          return Nimbus.Auth.app_ready_func();
         });
         return authObserved = true;
       }
