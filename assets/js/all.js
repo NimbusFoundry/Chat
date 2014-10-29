@@ -5818,14 +5818,13 @@
   };
 
   Nimbus.Model.Firebase = (function() {
-    var base, realtimeEvents, root, server;
+    var base, realtimeEvents, root, server, workspaceId;
     base = {};
     root = null;
     server = null;
     realtimeEvents = [];
     this.cloudcache = {};
-
-    var _workspaceId = ''
+    workspaceId = '';
 
     /*
       1. try get firebase workspace root
@@ -5835,18 +5834,17 @@
     base._setup = function() {
       root = Nimbus.Firebase.server;
       if (workspaceId) {
-        server = root.child(workspaceId+'/pool')
-      }else{
-        server = root;
-      };
+        return server = root.child(workspaceId + '/pool');
+      } else {
+        return server = root;
+      }
     };
-    
     base.set_workspace = function(id) {
       var workspacePool;
       workspaceId = id;
       if (root) {
         workspacePool = id + '/pool';
-        server = root.child(workspacePool);
+        return server = root.child(workspacePool);
       }
     };
 
@@ -6081,9 +6079,8 @@
         Nimbus.realtime.app_files = workspaces;
         self.watch_workspace(workspace.id);
         self.bind_workspace(workspace.id);
-
-        if(callback){
-          callback();
+        if (callback) {
+          return callback();
         }
       });
       localStorage['state'] = 'Working';
@@ -6134,16 +6131,16 @@
         server.onAuth(function(authData) {
           if (authData) {
             console.log('success', authData);
-            self.init_workspace(function(){
+            return self.init_workspace(function() {
               self.auth_callback(authData);
               Nimbus.Auth.app_ready = true;
-              Nimbus.Auth.app_ready_func();  
+              return Nimbus.Auth.app_ready_func();
             });
           } else {
             console.log('failed');
             self.auth_callback(authData);
             Nimbus.Auth.app_ready = true;
-            Nimbus.Auth.app_ready_func();
+            return Nimbus.Auth.app_ready_func();
           }
         });
         return authObserved = true;
@@ -6239,12 +6236,19 @@
     /*
       1. get_shared_users return user list in workspaces/workspaceId/users
      */
-    client.get_shared_users = function(callback) {
+    client.get_shared_users_real = function(callback) {
       var node, workspace;
       workspace = Nimbus.realtime.c_file;
-      node = "workspaces/" + workspaces.id + "/users";
+      node = "" + workspace.id + "/users";
       return server.child(node).once('value', function(res) {
-        return res;
+        var data;
+        data = res.val();
+        if (!data) {
+          data = [];
+        }
+        if (callback) {
+          return callback(data);
+        }
       });
     };
 
@@ -6252,7 +6256,7 @@
       1. create a workspace - todo
      */
     client.create_workspace = function(title, callback) {
-      var path, user, workspace;
+      var id, owner, path, user, workspace;
       user = server.getAuth();
       workspace = {
         'title': title,
@@ -6260,6 +6264,20 @@
         'owner': user.uid
       };
       path = server.child('workspaces').push(workspace);
+      id = path.name();
+      owner = {
+        role: 'Owner',
+        id: user.uid,
+        permissionId: user.uid,
+        pic: '',
+        displayName: user.uid
+      };
+      server.child(id + '/users').transaction(function(data) {
+        if (!data) {
+          data = [];
+        }
+        return data.push(owner);
+      });
       if (path.name()) {
         Nimbus.realtime.app_files[path.name()] = workspace;
       }
