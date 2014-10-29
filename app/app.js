@@ -13,7 +13,7 @@
     config.appName = 'Chat';
     config.plugins = {
       user: 'core/plugins/user',
-      workspace: 'core/plugins/workspace',
+      workspaces: 'app/plugins/workspaces',
       support: 'core/plugins/support',
       chat: 'app/plugins/chat'
     };

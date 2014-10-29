@@ -86,7 +86,6 @@ define_controller = ()->
 				sync_collaborators()
 				$scope.$apply()
 
-
 			# add event for user
 			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
 			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);

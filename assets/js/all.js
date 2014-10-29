@@ -6017,7 +6017,9 @@
         var model;
         obj = res.val();
         model = Nimbus.dictModel[obj.type];
-        return model.process_call_chain(event, obj, isLocal);
+        if (model) {
+          return model.process_call_chain(event, obj, isLocal);
+        }
       };
       realtimeEvents = Nimbus.Firebase.realtimeEvents;
       event = '';
@@ -6188,6 +6190,7 @@
       return server.child(node).once("value", function(res) {
         var k, v, _ref;
         Nimbus.realtime.c_file = res.val();
+        Nimbus.realtime.c_file.id = id;
         if (Nimbus.dictModel != null) {
           _ref = Nimbus.dictModel;
           for (k in _ref) {
@@ -6234,6 +6237,24 @@
     };
 
     /*
+      1. return the constructed user object for share
+     */
+    client.get_current_user = function(callback) {
+      var me, user;
+      user = server.getAuth();
+      me = {
+        email: user.password.email,
+        pic: '',
+        displayName: user.uid,
+        permissionId: user.uid,
+        id: user.uid
+      };
+      if (callback) {
+        return callback(me);
+      }
+    };
+
+    /*
       1. get_shared_users return user list in workspaces/workspaceId/users
      */
     client.get_shared_users_real = function(callback) {
@@ -6256,15 +6277,9 @@
       1. create a workspace - todo
      */
     client.create_workspace = function(title, callback) {
-      var id, owner, path, user, workspace;
+      var email, id, owner, path, user, workspace;
       user = server.getAuth();
-      workspace = {
-        'title': title,
-        'users': [user.uid],
-        'owner': user.uid
-      };
-      path = server.child('workspaces').push(workspace);
-      id = path.name();
+      email = user.password.email;
       owner = {
         role: 'Owner',
         id: user.uid,
@@ -6272,6 +6287,14 @@
         pic: '',
         displayName: user.uid
       };
+      workspace = {
+        'title': title,
+        'users': [user.uid],
+        'owners': [owner],
+        'mimeType': 'workspace'
+      };
+      path = server.child('workspaces').push(workspace);
+      id = path.name();
       server.child(id + '/users').transaction(function(data) {
         if (!data) {
           data = [];
@@ -6282,7 +6305,7 @@
         Nimbus.realtime.app_files[path.name()] = workspace;
       }
       if (callback) {
-        return callback();
+        return callback(workspace);
       }
     };
     return client;
