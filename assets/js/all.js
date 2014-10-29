@@ -2469,13 +2469,15 @@
             Nimbus.Firebase = {
               id: this.key,
               appName: this.app_name,
-              server: new Firebase("https://" + this.key + ".firebaseio.com")
+              server: new Firebase("https://" + this.key + ".firebaseio.com"),
+              realtimeEvents: []
             };
             this.extend(Nimbus.Auth.Firebase);
             this._authorize = this.proxy(this.authenticate_firebase);
             this.initialize = this.proxy(this.initialize_firebase);
             this.authorized = this.proxy(this.firebase_authorized);
             this.setServer();
+            Nimbus.Share.setup(this.service);
             break;
           default:
             log("Invalid service name");
@@ -2570,6 +2572,16 @@
         case "GDrive":
           log("share api with GDrive");
           this.extend(Nimbus.Client.GDrive);
+          this.get_users = this.proxy(this.get_shared_users);
+          this.add_user = this.proxy(this.add_share_user);
+          this.remove_user = this.proxy(this.remove_share_user);
+          this.get_me = this.proxy(this.get_current_user);
+          this.get_spaces = this.proxy(this.get_app_folders);
+          this.switch_spaces = this.proxy(this.switch_to_app_folder);
+          return this.switch_file_real = this.proxy(this.switch_to_app_file_real);
+        case 'Firebase':
+          this.extend(Nimbus.Client.Firebase);
+          this._setup();
           this.get_users = this.proxy(this.get_shared_users);
           this.add_user = this.proxy(this.add_share_user);
           this.remove_user = this.proxy(this.remove_share_user);
@@ -5806,24 +5818,37 @@
   };
 
   Nimbus.Model.Firebase = (function() {
-    var base, server;
+    var base, realtimeEvents, root, server;
     base = {};
+    root = null;
     server = null;
+    realtimeEvents = [];
     this.cloudcache = {};
+
+    /*
+      1. try get firebase workspace root
+      2. set server as the pool node for workspace
+      3. should be called again when the workspace is changed
+     */
     base._setup = function() {
-      return server = Nimbus.Firebase.server;
+      return server = root = Nimbus.Firebase.server;
+    };
+    base.set_workspace = function(id) {
+      var workspacePool;
+      workspacePool = id + '/pool';
+      return server = root.child(workspacePool);
     };
 
     /*
-    	* firebase uses json ojbect
-    	currently only return the original object
+      * firebase uses json ojbect
+      currently only return the original object
      */
     base.toCloudStructure = function(data) {
       return JSON.parse(JSON.stringify(data));
     };
 
     /*
-    	currently only return the original object
+      currently only return the original object
      */
     base.fromCloudStructure = function(data) {
       return JSON.parse(JSON.stringify(data));
@@ -5831,7 +5856,7 @@
     base.diff_objects = function(previous, current) {};
 
     /*
-    		basic sync_all implementation
+        basic sync_all implementation
      */
     base.sync_all = function(callback) {
       var self;
@@ -5845,8 +5870,8 @@
     };
 
     /*
-    	1. using once to get all value
-    	2. add value change event for futher uses
+      1. using once to get all value
+      2. add value change event for futher uses
      */
     base.load_all_from_cloud = function(complete) {
       var self;
@@ -5874,8 +5899,8 @@
     };
 
     /*
-    	1. this is almost the same for update to cloud
-    	local is the same
+      1. this is almost the same for update to cloud
+      local is the same
      */
     base.add_to_cloud = function(object, callback) {
       var data, id;
@@ -5895,7 +5920,7 @@
     };
 
     /*
-    	1. trigger localsync model to save to localstorage
+      1. trigger localsync model to save to localstorage
      */
     base.add_from_cloud = function(id, callback) {
       var obj, x;
@@ -5906,15 +5931,34 @@
     };
 
     /*
-    	1. this is quite different from realtime
-    	we need to observe from the start for every key
+      1. remove data on the cloud
      */
-    base.onUpdate = function(callback) {
-      return console.log(callback);
+    base.delete_from_cloud = function(id, callback) {
+      return server.child(id).remove();
     };
 
     /*
-    	extend method when firebase is initialized
+      1. process call chain
+     */
+    base.process_call_chain = function(mod, obj, isLocal) {
+      return console.log(obj);
+    };
+
+    /*
+    
+      1. this is quite different from realtime
+      we need to observe from the start for every key
+     */
+    base.onUpdate = function(callback) {
+      realtimeEvents = Nimbus.Firebase.realtimeEvents;
+      if (!realtimeEvents[this.name]) {
+        realtimeEvents[this.name] = [];
+      }
+      return realtimeEvents[this.name].push(callback);
+    };
+
+    /*
+      extend method when firebase is initialized
      */
     base.extended = function() {
       this.sync(this.proxy(this.real_time_sync));
@@ -5924,19 +5968,122 @@
   })();
 
   Nimbus.Auth.Firebase = (function() {
-    var authObserved, authOject, obj, server;
+    var authObserved, authOject, obj, obj_to_array, server;
     obj = {};
     authOject = null;
     server = null;
     authObserved = false;
+
+    /*
+      1. create array from a dictionary object
+     */
+    obj_to_array = function(obj) {
+      var item, key, res;
+      res = [];
+      for (key in obj) {
+        item = obj[key];
+        item.id = key;
+        res.push(item);
+      }
+      return res;
+    };
+
+    /*
+      1. set the server
+     */
     obj.setServer = function() {
-      server = Nimbus.Firebase.server;
+      return server = Nimbus.Firebase.server;
 
       /*
-      		 1.will check if server is online or offline
+           1.will check if server is online or offline - todo
        */
-      return localStorage['state'] = 'Working';
     };
+
+    /*
+      1. monitor data in workspace
+     */
+    obj.watch_workspace = function(id) {
+      var apply_to_model, event, isLocal, realtimeEvents;
+      apply_to_model = function(event, res, isLocal) {
+        var model;
+        obj = res.val();
+        model = Nimbus.dictModel[obj.type];
+        return model.process_call_chain(event, obj, isLocal);
+      };
+      realtimeEvents = Nimbus.Firebase.realtimeEvents;
+      event = '';
+      isLocal = true;
+      server.child("" + id + "/pool").on('child_added', function(res) {
+        event = 'Create';
+        return apply_to_model(event, res, isLocal);
+      });
+      server.child("" + id + "/pool").on('child_changed', function(res) {
+        event = 'Update';
+        return apply_to_model(event, res, isLocal);
+      });
+      server.child("" + id + "/pool").on('child_removed', function(res) {
+        event = 'Delete';
+        return apply_to_model(event, res, isLocal);
+      });
+      return server.child("" + id + "/pool").on('value', function(res) {
+        if (!res) {
+          return console.log('initial create');
+        }
+      });
+    };
+
+    /*
+     */
+    obj.bind_workspace = function(id) {
+      return Nimbus.Model.Firebase.set_workspace(id);
+    };
+
+    /*
+      1. initialize the workspace if authorization is 
+      fullfilled.
+     */
+    obj.init_workspace = function(callback) {
+      var self, user;
+      self = this;
+      user = server.getAuth();
+      server.child('workspaces').once('value', function(res) {
+        var data, item, path, workspace, workspaces;
+        workspace = '';
+        workspaces = [];
+        data = res.val();
+        if (!data) {
+          workspace = item = {
+            title: Nimbus.Auth.app_name,
+            users: [user.uid],
+            owner: user.uid
+          };
+          path = server.child('workspaces').push(item);
+          localStorage['last_opened_workspace'] = path.name();
+          workspace.id = path.name();
+          workspaces.push(workspace);
+        } else {
+          workspaces = obj_to_array(data);
+          workspace = workspaces[0];
+          localStorage['last_opened_workspace'] = workspace.id;
+        }
+        Nimbus.realtime.c_file = workspace;
+        Nimbus.realtime.app_files = workspaces;
+        self.watch_workspace(workspace.id);
+        return self.bind_workspace(workspace.id);
+      });
+      localStorage['state'] = 'Working';
+
+      /*
+          a. monitoring workspace changes and save to app_files
+       */
+      return server.child('workspaces').on('value', function(res) {
+        return Nimbus.realtime.app_files = obj_to_array(res.val());
+      });
+    };
+
+    /*
+      1. primary authentication method for firebase
+     */
     obj.authenticate_firebase = function(p, d) {
       var auth, authHandler, data, provider;
       provider = p ? p : Nimbus.Auth.setting.provider;
@@ -5959,6 +6106,11 @@
       server.authWithOAuthPopup("<provider>", authHandler);
       return server.authWithOAuthRedirect("<provider>", authHandler);
     };
+
+    /*
+      1. init firebase 
+      2. the app ready func should be called before the auth is done?
+     */
     obj.initialize_firebase = function() {
       var self;
       server = Nimbus.Firebase.server;
@@ -5967,21 +6119,30 @@
         server.onAuth(function(authData) {
           if (authData) {
             console.log('success', authData);
+            self.init_workspace();
           } else {
             console.log('failed');
           }
-          return self.auth_callback(authData);
+          self.auth_callback(authData);
+          Nimbus.Auth.app_ready = true;
+          return Nimbus.Auth.app_ready_func();
         });
-        authObserved = true;
+        return authObserved = true;
       }
-      Nimbus.Auth.app_ready = true;
-      return Nimbus.Auth.app_ready_func();
     };
+
+    /*
+      1. check if the user is authorized
+     */
     obj.firebase_authorized = function() {
       var authData;
       authData = server.getAuth();
       return authData;
     };
+
+    /*
+      1. sign out the current user
+     */
     obj.logout = function() {
       return server.unauth();
     };
@@ -5992,6 +6153,102 @@
       return console.log('placeholder callback for auth');
     };
     return obj;
+  })();
+
+  Nimbus.Client.Firebase = (function() {
+    var client, server;
+    server = {};
+    client = {};
+    client._setup = function() {
+      return server = Nimbus.Firebase.server;
+    };
+
+    /*
+      1. switch workspace
+     */
+    client.switch_to_app_file_real = function(id, callback) {
+      var node;
+      node = "workspaces/" + id;
+      return server.child(node).once("value", function(res) {
+        var k, v, _ref;
+        Nimbus.realtime.c_file = res.val();
+        if (Nimbus.dictModel != null) {
+          _ref = Nimbus.dictModel;
+          for (k in _ref) {
+            v = _ref[k];
+            v.records = {};
+            v.cloudcache = {};
+            delete localStorage[v.name];
+          }
+        }
+        Nimbus.Model.Firebase.set_workspace(id);
+        if (callback) {
+          return callback();
+        }
+      });
+    };
+
+    /*
+      add share user
+     */
+    client.add_share_user_real = function(email, callback) {
+      var data, node, workspace;
+      workspace = Nimbus.realtime.c_file;
+      node = "workspaces/" + workspaces.id + "/users/" + email;
+      data = {
+        pid: email,
+        id: email,
+        "email": email,
+        "name": email,
+        permissionId: email
+      };
+      server.child(node).set(data);
+      if (callback) {
+        return callback();
+      }
+    };
+
+    /*
+      1. get_user_email for password login
+     */
+    client.get_user_email = function() {
+      var user;
+      user = server.getAuth();
+      return server.password.email;
+    };
+
+    /*
+      1. get_shared_users return user list in workspaces/workspaceId/users
+     */
+    client.get_shared_users = function(callback) {
+      var node, workspace;
+      workspace = Nimbus.realtime.c_file;
+      node = "workspaces/" + workspaces.id + "/users";
+      return server.child(node).once('value', function(res) {
+        return res;
+      });
+    };
+
+    /*
+      1. create a workspace - todo
+     */
+    client.create_workspace = function(title, callback) {
+      var path, user, workspace;
+      user = server.getAuth();
+      workspace = {
+        'title': title,
+        'users': [user.uid],
+        'owner': user.uid
+      };
+      path = server.child('workspaces').push(workspace);
+      if (path.name()) {
+        Nimbus.realtime.app_files[path.name()] = workspace;
+      }
+      if (callback) {
+        return callback();
+      }
+    };
+    return client;
   })();
 
   Nimbus.Auth.Multi = {
