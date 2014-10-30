@@ -16200,10 +16200,10 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     return require(['core'], function(main) {
       self.plugins_loaded = true;
       return require(main.plugins, function() {
-        var dependency, plugin, _i, _len;
-        for (_i = 0, _len = arguments.length; _i < _len; _i++) {
-          plugin = arguments[_i];
-          self._plugins[plugin.name] = plugin;
+        var dependency, key, plugin, _i, _len;
+        for (plugin = _i = 0, _len = arguments.length; _i < _len; plugin = ++_i) {
+          key = arguments[plugin];
+          self._plugins[key] = plugin;
         }
         dependency = self.angular.dependency.concat(['foundry-ui', 'ngRoute']);
         angular.module('foundry', dependency).config([
@@ -16219,12 +16219,18 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
           }
         ]).run([
           '$rootScope', '$location', function($rootScope, $location) {
-            var inex, _plugin, _ref;
+            var inex, orderPlugin, pluginToShow, _plugin, _ref;
             $rootScope._plugins = [];
+            orderPlugin = -15;
+            pluginToShow = '';
             _ref = foundry._plugins;
             for (inex in _ref) {
               _plugin = _ref[inex];
-              $rootScope._plugins.push(_plugin);
+              if (_plugins.order > orderPlugin) {
+                orderPlugin = plugin.order;
+                pluginToShow = index;
+              }
+              $rootScope._plugins[index] = _plugin;
             }
             $rootScope._active_app_path = '';
             $rootScope._current_global_user = foundry._current_user;
@@ -16234,7 +16240,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
               if (default_path && !$location.path()) {
                 $location.path(default_path);
               } else if (!$location.path()) {
-                $location.path('/workspace');
+                $location.path(pluginToShow);
               }
               $rootScope._active_app_path = $location.path();
               localStorage.default_plugin = $location.path();
@@ -16257,7 +16263,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     for (key in _ref) {
       value = _ref[key];
       paths[key] = value + '/index';
-      plugins.push(key);
+      plugins[key] = value;
       packages.push({
         name: key,
         location: value,
@@ -16324,8 +16330,8 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     _ref = this._plugins;
     for (k in _ref) {
       v = _ref[k];
-      if (v.type === 'plugin') {
-        this.module_status[v.name] = 'start';
+      if (v.init) {
+        this.module_status[k] = 'start';
       }
     }
     _ref1 = this._plugins;
@@ -16349,7 +16355,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     _ref = this._plugins;
     for (k in _ref) {
       v = _ref[k];
-      if (this.module_status[v.name] === 'start') {
+      if (this.module_status[k] === 'start') {
         return;
       }
     }

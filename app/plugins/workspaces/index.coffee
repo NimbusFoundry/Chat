@@ -2,10 +2,7 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 	c_file = Nimbus.realtime.c_file
 	doc_plugin=
 		type : 'plugin'
-		title : 'Workspace'
-		anchor : '#/workspaces'
 		name : 'workspace'
-		version : 1.0
 		order : -13
 		icon : 'icon-folder-close'
 		_app_files : []
