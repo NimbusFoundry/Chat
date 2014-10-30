@@ -52,7 +52,6 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 		all_doc : ()->
 			# filter folder
 			@_app_files = Nimbus.realtime.app_files
-			
 			@_app_files
 
 		# open a workspace 
@@ -83,7 +82,7 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 				console.log 'name required'
 			self = @
 			Nimbus.Share.create_workspace(name, (data)->
-				callback(data)
+				callback(data) if callback
 				angular.element(document).scope().$apply()
 				return
 			)

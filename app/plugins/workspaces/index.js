@@ -76,7 +76,9 @@
         }
         self = this;
         Nimbus.Share.create_workspace(name, function(data) {
-          callback(data);
+          if (callback) {
+            callback(data);
+          }
           angular.element(document).scope().$apply();
         });
         analytic.owner({

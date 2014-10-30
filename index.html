@@ -41,8 +41,10 @@
 			</ul>
 		</li>
 		<!--  -->
-		<li ng-hide="_plugin.hide_plugin" ng-repeat="_plugin in _plugins | orderBy:'order':true" ng-class="{active:'#'+_active_app_path==_plugin.anchor}">
-			<a href="{{_plugin.anchor}}"><span><i class="{{_plugin.icon}}" ></i>{{_plugin.title}}</span></a>
+		<li ng-hide="_plugin.hide_plugin" ng-repeat="name, _plugin of _plugins | orderBy:'order':true" ng-class="{active:'#'+_active_app_path=='#/'+name}">
+			<a href="{{name}}">
+				<span ng-if="_plugin.title" ng-bind="_plugin.title"><i class="{{_plugin.icon}}" ></i></span></a>
+				<span ng-if="!_plugin.title" ng-bind="name|upppercase"><i class="{{_plugin.icon}}" ></i></span></a>
 		</li>
 
 		<li>
