@@ -7,7 +7,6 @@
     c_file = Nimbus.realtime.c_file;
     return doc_plugin = {
       type: 'plugin',
-      name: 'workspace',
       order: -13,
       icon: 'icon-folder-close',
       _app_files: [],
@@ -36,7 +35,7 @@
                 foundry._current_user.email = Nimbus.Share.get_user_email();
               }
               console.log(_users);
-              return foundry.initialized(self.name);
+              return foundry.initialized('workspaces');
             });
           });
         }
@@ -202,7 +201,7 @@
     angular.module('foundry').controller('ProjectController', [
       '$scope', '$rootScope', 'ngDialog', '$foundry', function($scope, $rootScope, ngDialog, $foundry) {
         var docModule;
-        docModule = foundry.load('workspace');
+        docModule = foundry.load('workspaces');
         $rootScope.breadcum = 'Workspace';
         $scope.filename = '';
         $scope.current_edit = -1;

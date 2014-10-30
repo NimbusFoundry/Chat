@@ -2,7 +2,6 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 	c_file = Nimbus.realtime.c_file
 	doc_plugin=
 		type : 'plugin'
-		name : 'workspace'
 		order : -13
 		icon : 'icon-folder-close'
 		_app_files : []
@@ -28,7 +27,7 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 							foundry._current_user.email = Nimbus.Share.get_user_email()
 						
 						console.log _users
-						foundry.initialized(self.name)
+						foundry.initialized('workspaces')
 					)
 				)
 
@@ -197,7 +196,7 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 define_controller = ()->
 
 	angular.module('foundry').controller('ProjectController', ['$scope', '$rootScope', 'ngDialog', '$foundry', ($scope, $rootScope, ngDialog, $foundry)->
-		docModule = foundry.load('workspace')
+		docModule = foundry.load('workspaces')
 
 		$rootScope.breadcum = 'Workspace'
 		$scope.filename = ''

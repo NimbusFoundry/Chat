@@ -45,7 +45,7 @@
   foundry.ready(function() {
     if (Nimbus.Auth.authorized()) {
       foundry.init(function() {
-        foundry._plugins.workspace.title = 'Manage Rooms'
+        foundry._plugins.workspaces.title = 'Manage Rooms'
         $('#loading').addClass('loaded');
         return $("#login_buttons").removeClass("redirect");
       });

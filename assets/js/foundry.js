@@ -16198,12 +16198,14 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     var self;
     self = this;
     return require(['core'], function(main) {
+      var requirePlugins;
       self.plugins_loaded = true;
-      return require(main.plugins, function() {
-        var dependency, key, plugin, _i, _len;
-        for (plugin = _i = 0, _len = arguments.length; _i < _len; plugin = ++_i) {
-          key = arguments[plugin];
-          self._plugins[key] = plugin;
+      requirePlugins = function() {
+        var dependency, key, name, plugin;
+        for (key in arguments) {
+          plugin = arguments[key];
+          name = main.names[key];
+          self._plugins[name] = plugin;
         }
         dependency = self.angular.dependency.concat(['foundry-ui', 'ngRoute']);
         angular.module('foundry', dependency).config([
@@ -16219,14 +16221,14 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
           }
         ]).run([
           '$rootScope', '$location', function($rootScope, $location) {
-            var inex, orderPlugin, pluginToShow, _plugin, _ref;
-            $rootScope._plugins = [];
+            var index, orderPlugin, pluginToShow, _plugin, _ref;
+            $rootScope._plugins = {};
             orderPlugin = -15;
             pluginToShow = '';
             _ref = foundry._plugins;
-            for (inex in _ref) {
-              _plugin = _ref[inex];
-              if (_plugins.order > orderPlugin) {
+            for (index in _ref) {
+              _plugin = _ref[index];
+              if (_plugin.order > orderPlugin) {
                 orderPlugin = plugin.order;
                 pluginToShow = index;
               }
@@ -16249,21 +16251,24 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         ]);
         console.log('plugins loaded');
         return self.plugin_load_completed();
-      });
+      };
+      return require(main.names, requirePlugins);
     });
   };
 
   define('core', ['config'], function(config) {
-    var c, key, packages, paths, plugins, value, _ref;
+    var c, key, names, packages, paths, plugins, value, _ref;
     console.log(config);
     paths = {};
-    plugins = [];
+    plugins = {};
+    names = [];
     packages = [];
     _ref = config.plugins;
     for (key in _ref) {
       value = _ref[key];
       paths[key] = value + '/index';
       plugins[key] = value;
+      names.push(key);
       packages.push({
         name: key,
         location: value,
@@ -16277,7 +16282,8 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
       'plugins': plugins,
       'paths': paths,
       'packages': packages,
-      'appName': config.appName
+      'appName': config.appName,
+      'names': names
     };
     return c;
   });
