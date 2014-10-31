@@ -6211,20 +6211,34 @@
       add share user
      */
     client.add_share_user_real = function(email, callback) {
-      var data, node, workspace;
+      var item, node, workspace;
       workspace = Nimbus.realtime.c_file;
-      node = "workspaces/" + workspaces.id + "/users/" + email;
-      data = {
+      node = "workspaces/" + workspace.id + "/users/";
+      item = {
         pid: email,
         id: email,
         "email": email,
         "name": email,
         permissionId: email
       };
-      server.child(node).set(data);
-      if (callback) {
-        return callback();
-      }
+      return server.child(node).transaction(function(data) {
+        var index, insert, user;
+        insert = true;
+        for (index in data) {
+          user = data[index];
+          if (user.email === email) {
+            insert = false;
+            break;
+          }
+        }
+        if (insert) {
+          data.push(item);
+        }
+        if (callback) {
+          callback(item);
+        }
+        return data;
+      });
     };
 
     /*
@@ -6260,7 +6274,7 @@
     client.get_shared_users_real = function(callback) {
       var node, workspace;
       workspace = Nimbus.realtime.c_file;
-      node = "" + workspace.id + "/users";
+      node = "workspaces/" + workspace.id + "/users";
       return server.child(node).once('value', function(res) {
         var data;
         data = res.val();
@@ -6285,11 +6299,13 @@
         id: user.uid,
         permissionId: user.uid,
         pic: '',
-        displayName: user.uid
+        displayName: user.uid,
+        name: email,
+        'email': email
       };
       workspace = {
         'title': title,
-        'users': [user.uid],
+        'users': [owner],
         'owners': [owner],
         'mimeType': 'workspace'
       };
