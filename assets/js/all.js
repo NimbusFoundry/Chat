@@ -6301,12 +6301,25 @@
         }
         return data.push(owner);
       });
-      if (path.name()) {
-        Nimbus.realtime.app_files[path.name()] = workspace;
-      }
       if (callback) {
         return callback(workspace);
       }
+    };
+    client.deleteFile = function(id, callback) {
+      var file, index, _ref, _results;
+      server.child(id).remove();
+      server.child('workspaces/' + id).remove();
+      _ref = Nimbus.realtime.app_files;
+      _results = [];
+      for (index in _ref) {
+        file = _ref[index];
+        if (file.id === id) {
+          _results.push(Nimbus.realtime.app_files.splice(index));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     };
     return client;
   })();

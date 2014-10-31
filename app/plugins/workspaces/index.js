@@ -174,24 +174,15 @@
         request = gapi.client.request(param);
       },
       del_doc: function(doc, callback) {
-        var file, index, _ref, _ref1;
         if (doc.id === Nimbus.realtime.c_file.id) {
           return;
         }
-        Nimbus.Client.GDrive.deleteFile(doc.id);
-        _ref = this._app_files;
-        for (index in _ref) {
-          file = _ref[index];
-          if (doc.id === file.id) {
-            this._app_files.splice(index, 1);
-          }
+        if (Nimbus.Share.deleteFile) {
+          Nimbus.Share.deleteFile(doc.id);
         }
-        _ref1 = Nimbus.realtime.app_files;
-        for (index in _ref1) {
-          file = _ref1[index];
-          if (doc.id === file.id) {
-            Nimbus.realtime.app_files.splice(index, 1);
-          }
+        this._app_files = Nimbus.realtime.app_files;
+        if (callback) {
+          callback();
         }
       }
     };

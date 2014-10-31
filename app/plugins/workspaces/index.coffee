@@ -180,14 +180,10 @@ define('workspaces', ['require','core/analytic'],(require, analytic)->
 		del_doc : (doc, callback)->
 			# delte document
 			return if doc.id is Nimbus.realtime.c_file.id
-			Nimbus.Client.GDrive.deleteFile(doc.id)
-			for index,file of @_app_files
-				if doc.id is file.id
-					@_app_files.splice(index,1)
-			
-			for index,file of Nimbus.realtime.app_files
-				if doc.id is file.id
-					Nimbus.realtime.app_files.splice(index,1)
+			Nimbus.Share.deleteFile(doc.id) if Nimbus.Share.deleteFile
+			@_app_files = Nimbus.realtime.app_files
+
+			callback() if callback
 
 			return
 				
