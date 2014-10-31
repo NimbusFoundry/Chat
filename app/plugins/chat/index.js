@@ -4,7 +4,6 @@
 
   define('chat', function() {
     return {
-      name: 'chat',
       title: 'Chat Room',
       icon: 'icon-comment',
       type: 'plugin',
@@ -14,7 +13,7 @@
         self = this;
         attrs = ['userId', 'userName', 'ts', 'image', 'content', 'file', 'avatar', 'local'];
         foundry.model('Message', attrs, function(model) {
-          return foundry.initialized(self.name);
+          return foundry.initialized('chat');
         });
         return define_controller();
       },
@@ -39,23 +38,29 @@
           }
         });
         sync_collaborators = function() {
-          var users;
-          users = Nimbus.realtime.doc.getCollaborators();
-          return $scope.collaborators = users;
+          return Nimbus.realtime.getCollaborators(function(users) {
+            return $scope.collaborators = users;
+          });
         };
         $scope.load = function() {
-          var messages, user, _i, _len, _ref;
+          var messages;
           messages = $filter('orderBy')(messageModel.all(), 'local', false);
           $scope.messages = messages;
           $scope.me = null;
-          _ref = Nimbus.realtime.doc.getCollaborators();
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            user = _ref[_i];
-            if (user.isMe) {
-              $scope.me = user;
-              break;
+          Nimbus.realtime.getCollaborators(function(users) {
+            var user, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = users.length; _i < _len; _i++) {
+              user = users[_i];
+              if (user.isMe) {
+                $scope.me = user;
+                break;
+              } else {
+                _results.push(void 0);
+              }
             }
-          }
+            return _results;
+          });
           sync_collaborators();
         };
         $scope.send = function() {
@@ -67,10 +72,10 @@
           now = new Date();
           data = {
             userId: foundry._current_user.id,
-            userName: foundry._current_user.name,
+            userName: foundry._current_user.name || foundry._current_user.displayName,
             content: $scope.message,
             ts: now.getTime() + now.getTimezoneOffset() * 60000,
-            avatar: $scope.me.photoUrl,
+            avatar: $scope.me.photoUrl || 'assets/img/photo.jpg',
             local: now.getTime()
           };
           messageModel.create(data);
@@ -85,8 +90,6 @@
           sync_collaborators();
           return $scope.$apply();
         };
-        Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
-        Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
         return $scope.load();
       }
     ]);

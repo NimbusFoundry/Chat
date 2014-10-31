@@ -1,5 +1,4 @@
 define('chat', ()->
-	name : 'chat'
 	title: 'Chat Room'
 	icon: 'icon-comment'
 	type: 'plugin'
@@ -8,7 +7,7 @@ define('chat', ()->
 		self = @
 		attrs = ['userId', 'userName', 'ts', 'image', 'content', 'file', 'avatar', 'local']
 		foundry.model('Message', attrs, (model)->
-			foundry.initialized(self.name)
+			foundry.initialized('chat')
 		)
 		define_controller()
 	inited : ()->
@@ -32,10 +31,10 @@ define_controller = ()->
 			)
 
 			sync_collaborators = ()->
-				users = Nimbus.realtime.doc.getCollaborators()
-
-				# remove same user for different window -todo
-				$scope.collaborators = users
+				Nimbus.realtime.getCollaborators((users)->
+					# remove same user for different window -todo
+					$scope.collaborators = users
+				)
 
 			# load messages
 			$scope.load = ()->
@@ -45,10 +44,12 @@ define_controller = ()->
 
 				$scope.me = null
 				# find me
-				for user in Nimbus.realtime.doc.getCollaborators()
-				 	if user.isMe
-				 		$scope.me = user
-				 		break
+				Nimbus.realtime.getCollaborators((users)->
+					for user in users
+						if user.isMe
+					 		$scope.me = user
+					 		break
+				)
 
 				sync_collaborators()
 				# adjust the height
@@ -66,10 +67,10 @@ define_controller = ()->
 
 				data = 
 					userId: foundry._current_user.id
-					userName: foundry._current_user.name
+					userName: foundry._current_user.name || foundry._current_user.displayName
 					content: $scope.message
 					ts: now.getTime() + now.getTimezoneOffset()*60000
-					avatar: $scope.me.photoUrl
+					avatar: $scope.me.photoUrl || 'assets/img/photo.jpg'
 					local: now.getTime()
 				messageModel.create(data)
 
@@ -87,8 +88,8 @@ define_controller = ()->
 				$scope.$apply()
 
 			# add event for user
-			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
-			Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
+			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
+			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
 
 			$scope.load()
 

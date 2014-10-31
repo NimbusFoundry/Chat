@@ -6002,11 +6002,30 @@
       1. set the server
      */
     obj.setServer = function() {
-      return server = Nimbus.Firebase.server;
+      var getCollaborators;
+      server = Nimbus.Firebase.server;
 
       /*
            1.will check if server is online or offline - todo
        */
+      getCollaborators = function(callback) {
+        var login;
+        login = server.getAuth();
+        return server.child(currentWorkspace + '/live').once('value', function(users) {
+          var data, index, user;
+          data = users.val();
+          for (index in data) {
+            user = data[index];
+            if (user.uid === login.uid) {
+              data[index].isMe = true;
+            }
+          }
+          if (callback) {
+            return callback(data);
+          }
+        });
+      };
+      return Nimbus.realtime.getCollaborators = getCollaborators;
     };
 
     /*
@@ -6067,8 +6086,9 @@
       }
       currentWorkspace = id;
       Nimbus.Model.Firebase.set_workspace(id);
-      return server.child(id + '/live').transctions(function(data) {
+      return server.child(id + '/live').transaction(function(data) {
         var index, live, user;
+        data = data ? data : [];
         live = false;
         for (index in data) {
           user = data[index];
