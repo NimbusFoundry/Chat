@@ -5977,11 +5977,12 @@
   })();
 
   Nimbus.Auth.Firebase = (function() {
-    var authObserved, authOject, obj, obj_to_array, server;
+    var authObserved, authOject, currentWorkspace, obj, obj_to_array, server;
     obj = {};
     authOject = null;
     server = null;
     authObserved = false;
+    currentWorkspace = '';
 
     /*
       1. create array from a dictionary object
@@ -6044,9 +6045,43 @@
     };
 
     /*
+      1. bind the workspace for model
+      2. set user in new workspace alive
+      3. remove the user in the old workspace
      */
     obj.bind_workspace = function(id) {
-      return Nimbus.Model.Firebase.set_workspace(id);
+      var login;
+      login = server.getAuth();
+      if (id !== currentWorkspace && currentWorkspace) {
+        server.child(currentWorkspace + '/live').transctions(function(data) {
+          var index, user;
+          for (index in data) {
+            user = data[index];
+            if (user.uid === login) {
+              data.splice(index);
+              break;
+            }
+          }
+          return data;
+        });
+      }
+      currentWorkspace = id;
+      Nimbus.Model.Firebase.set_workspace(id);
+      return server.child(id + '/live').transctions(function(data) {
+        var index, live, user;
+        live = false;
+        for (index in data) {
+          user = data[index];
+          if (user.uid === login.uid) {
+            live = true;
+            break;
+          }
+        }
+        if (!live) {
+          data.push(login);
+        }
+        return data;
+      });
     };
 
     /*
@@ -6174,7 +6209,7 @@
   })();
 
   Nimbus.Client.Firebase = (function() {
-    var client, server;
+    var client, register_user, server;
     server = {};
     client = {};
     client._setup = function() {
@@ -6208,7 +6243,26 @@
     };
 
     /*
-      add share user
+      Register user and send email
+     */
+    register_user = function(email, callback) {
+      return server.createUser({
+        'email': email,
+        password: 'freethecloud'
+      }, function(data) {
+        if (callback) {
+          return callback(data);
+        }
+      });
+    };
+
+    /*
+      send email with the password - todo
+     */
+
+    /*
+      1. add share user
+      2. register with this email - todo
      */
     client.add_share_user_real = function(email, callback) {
       var item, node, workspace;
@@ -6321,6 +6375,11 @@
         return callback(workspace);
       }
     };
+
+    /*
+      1. delete workspace itself
+         delete workspace pool data
+     */
     client.deleteFile = function(id, callback) {
       var file, index, _ref, _results;
       server.child(id).remove();
