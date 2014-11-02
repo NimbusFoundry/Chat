@@ -5823,7 +5823,6 @@
     root = null;
     server = null;
     realtimeEvents = [];
-    this.cloudcache = {};
     workspaceId = '';
 
     /*
@@ -5868,14 +5867,14 @@
         basic sync_all implementation
      */
     base.sync_all = function(callback) {
-      var self;
-      self = this;
-      return this.load_all_from_cloud(function() {
-        self.sync_model_base_algo();
+      var _handle;
+      _handle = function() {
+        this.sync_model_base_algo();
         if (callback) {
           return callback();
         }
-      });
+      };
+      return this.load_all_from_cloud(_handle.bind(this));
     };
 
     /*
@@ -5883,21 +5882,23 @@
       2. add value change event for futher uses
      */
     base.load_all_from_cloud = function(complete) {
-      var self;
-      self = this;
-      server.once('value', function(data) {
+      var name, _handle;
+      name = this.name;
+      _handle = function(data) {
         var id, item, objects;
+        this.cloudcache = {};
         objects = data.exportVal();
         for (id in objects) {
           item = objects[id];
-          if (item.type === self.name) {
-            self.cloudcache[id] = item;
+          if (item.type === name) {
+            this.cloudcache[id] = item;
           }
         }
         if (complete) {
           return complete();
         }
-      });
+      };
+      server.once('value', _handle.bind(this));
     };
     base.update_to_local = function(object, callback) {
       var data, x;

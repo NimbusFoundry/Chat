@@ -33,7 +33,7 @@
       app_name: 'Foundry'
     },
     "app_name": "Foundry",
-    'synchronous': false
+    'synchronous': true
   });
 
   Nimbus.Auth.authorized_callback = function() {
