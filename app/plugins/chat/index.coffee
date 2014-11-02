@@ -26,8 +26,7 @@ define_controller = ()->
 			messageModel = foundry._models['Message']
 			messageModel.onUpdate((mode, obj, isLocal)->
 				$scope.load()
-				if !isLocal
-		          $scope.$apply()
+				$scope.$apply()
 			)
 
 			sync_collaborators = ()->

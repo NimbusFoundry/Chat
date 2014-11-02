@@ -33,9 +33,7 @@
         messageModel = foundry._models['Message'];
         messageModel.onUpdate(function(mode, obj, isLocal) {
           $scope.load();
-          if (!isLocal) {
-            return $scope.$apply();
-          }
+          return $scope.$apply();
         });
         sync_collaborators = function() {
           return Nimbus.realtime.getCollaborators(function(users) {

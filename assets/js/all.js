@@ -5951,7 +5951,12 @@
       1. process call chain
      */
     base.process_call_chain = function(mod, obj, isLocal) {
-      return console.log(obj);
+      var event, index, _ref;
+      _ref = realtimeEvents[this.name];
+      for (index in _ref) {
+        event = _ref[index];
+        event.apply(this, [mod, obj, isLocal]);
+      }
     };
 
     /*
@@ -6036,7 +6041,6 @@
       var apply_to_model, event, isLocal, realtimeEvents;
       apply_to_model = function(event, res, isLocal) {
         var model;
-        obj = res.val();
         model = Nimbus.dictModel[obj.type];
         if (model) {
           return model.process_call_chain(event, obj, isLocal);
@@ -6046,15 +6050,33 @@
       event = '';
       isLocal = true;
       server.child("" + id + "/pool").on('child_added', function(res) {
-        event = 'Create';
-        return apply_to_model(event, res, isLocal);
+        var model;
+        event = 'CREATE';
+        obj = res.val();
+        model = Nimbus.dictModel[obj.type];
+        if (!model.cloudcache[obj.id]) {
+          model.cloudcache[obj.id] = obj;
+          model.add_from_cloud(obj.id);
+
+          console.log('add:', obj.id);
+          apply_to_model(event, obj, isLocal);
+        };
       });
       server.child("" + id + "/pool").on('child_changed', function(res) {
-        event = 'Update';
+        var model;
+        event = 'UPDATE';
+        obj = res.val();
+        model = Nimbus.dictModel[obj.type];
+        model.update_to_local(obj);
+        console.log('update:', obj.id);
         return apply_to_model(event, res, isLocal);
       });
       server.child("" + id + "/pool").on('child_removed', function(res) {
-        event = 'Delete';
+        var model;
+        event = 'DELETE';
+        obj = res.val();
+        model = Nimbus.dictModel[obj.type];
+        delete model.records[obj.id];
         return apply_to_model(event, res, isLocal);
       });
       return server.child("" + id + "/pool").on('value', function(res) {
