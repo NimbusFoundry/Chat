@@ -53,12 +53,19 @@
   });
 
   $(document).ready(function() {
-    $('#google_login').on('click', function(evt) {
+    $('#firebase_login_btn').on('click', function(evt) {
+      evt.preventDefault();
+      // check email and password
+      if(!$('.login-form input[name="email"]').val() || !$('.login-form input[name="passwd"]').val()){
+        return false;
+      }
+
       Nimbus.Auth.authorize('Firebase', {
-        'email' : 'luojieyy@gmail.com',
-        'password': 'luojie123',
+        'email' : $('.login-form input[name="email"]').val(),
+        'password': $('.login-form input[name="passwd"]').val(),
         'provider': 'password'
       });
+      return false;
     });
     $('.logout_btn').on('click', function(evt) {
       foundry.logout();

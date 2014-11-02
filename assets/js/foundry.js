@@ -16850,7 +16850,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
               data.role = 'Viewer';
             }
             if (pid === foundry._current_user.id) {
-              data.email = window.user_email;
+              data.email = foundry._current_user.email;
             }
             user_model.create(data);
             user.roleName = data.role;

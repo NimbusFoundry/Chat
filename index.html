@@ -7,13 +7,24 @@
 </head>
 <body>
 	<div id="loading">
+		<div class="login-form container-fluid" style="margin-top:20px">
+			<div class="row-fluid">
+				<form action="" class="form-inline">
+					<input type="text" name="email" placeholder="email" style="padding: 7px;">
+					<input type="password" name="passwd" placeholder="password" style="padding: 7px;">
+					<button type="submit" id="firebase_login_btn" class="btn btn-success">Sign In</button>
+				</form>
+			</div>
+			
+		</div>
 		<div id="login_buttons">
+
 			<img id="logo_loading" src="assets/img/chat.png" style="padding: 5px; height: 60px; background-color: #2E8EDB"/>
 			<h1>Chat (Build on <a target="_blank" href="http://nimbusfoundry.com">NimbusFoundry</a>)</h1>
 			<p class="simple_spinner">
 				<span class="spinner_div" style="display: inline-block"></span><span class="s_text">Logging In</span>
 			</p>
-			<a class="btn outline" id="google_login"><i style="color: #3498db;margin-right: 5px;" class="icon-google-plus"></i> Log in with Google Drive</a>
+			<!-- <a class="btn outline" id="google_login"><i style="color: #3498db;margin-right: 5px;" class="icon-google-plus"></i> Log in with Google Drive</a> -->
 		</div>
 	</div>
 	<!-- /.navbar -->

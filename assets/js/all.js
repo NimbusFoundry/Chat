@@ -5900,12 +5900,29 @@
       };
       server.once('value', _handle.bind(this));
     };
+
+    /*
+      1. trigger localsync model to save to localstorage
+     */
+    base.add_from_cloud = function(id, callback) {
+      var obj, x;
+      obj = this.cloudcache[id];
+      x = this.init(obj);
+      x.synced = true;
+      return x.save();
+    };
+
+    /*
+      1. try update the local data using update method
+     */
     base.update_to_local = function(object, callback) {
       var data, x;
       data = this.fromCloudStructure(object);
-      x = this.init(data);
-      x.synced = true;
-      return x.save();
+      data.synced = true;
+      x = this.find(data.id);
+      if (x) {
+        return x.updateAttributes(data);
+      }
     };
 
     /*
@@ -5927,17 +5944,6 @@
       id = object.id;
       data = this.toCloudStructure(object);
       return server.child(id).set(data);
-    };
-
-    /*
-      1. trigger localsync model to save to localstorage
-     */
-    base.add_from_cloud = function(id, callback) {
-      var obj, x;
-      obj = this.cloudcache[id];
-      x = this.init(obj);
-      x.synced = true;
-      return x.save();
     };
 
     /*
@@ -6054,13 +6060,12 @@
         event = 'CREATE';
         obj = res.val();
         model = Nimbus.dictModel[obj.type];
-        if (!model.cloudcache[obj.id]) {
-          model.cloudcache[obj.id] = obj;
-          model.add_from_cloud(obj.id);
-
-          console.log('add:', obj.id);
-          apply_to_model(event, obj, isLocal);
-        };
+        if (!model) {
+          return;
+        }
+        model.cloudcache[obj.id] = obj;
+        model.add_from_cloud(obj.id);
+        return apply_to_model(event, obj, isLocal);
       });
       server.child("" + id + "/pool").on('child_changed', function(res) {
         var model;
@@ -6068,7 +6073,6 @@
         obj = res.val();
         model = Nimbus.dictModel[obj.type];
         model.update_to_local(obj);
-        console.log('update:', obj.id);
         return apply_to_model(event, res, isLocal);
       });
       server.child("" + id + "/pool").on('child_removed', function(res) {
