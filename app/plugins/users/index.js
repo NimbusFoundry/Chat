@@ -119,8 +119,8 @@
         var model;
         model = this._models['user'];
         if (user.email) {
-          Nimbus.Share.add_share_user_real(user.email, function(u) {
-            var t;
+          return Nimbus.Share.add_share_user_real(user.email, function(u) {
+            var server, t;
             if (u.name) {
               t = model.findByAttribute('email', user.email);
               t.name = u.name;
@@ -136,14 +136,20 @@
               id: u.id,
               role: u.role
             };
+            if (Nimbus.Auth.service = 'Firebase') {
+              server = Nimbus.Firebase.server;
+              server.createUser({
+                email: user.email,
+                password: 'freethecloud'
+              }, function(err) {
+                return console.log(err);
+              });
+            }
             if (callback) {
               callback(u);
               return angular.element(document).scope().$apply();
             }
           });
-          if (Nimbus.realtime.folder && Nimbus.realtime.folder['binary_files']) {
-            return Nimbus.Share.add_share_user_real(user.email, null, Nimbus.realtime.folder['binary_files'].id);
-          }
         }
       },
       remove_share: function(user) {

@@ -138,14 +138,23 @@ define('users',['require', 'core/analytic'],(require, analytic)->
 						id : u.id
 						role : u.role
 
+					# register with this email
+					# check if this is firebase or not
+					if Nimbus.Auth.service = 'Firebase'
+						server = Nimbus.Firebase.server
+						server.createUser(
+							email : user.email
+							password : 'freethecloud'
+						, (err)->
+							console.log err
+						)
+
 					if callback
 						callback(u)
 						angular.element(document).scope().$apply()
 				)	
 				# share folder
-				if Nimbus.realtime.folder and Nimbus.realtime.folder['binary_files']
-					Nimbus.Share.add_share_user_real(user.email,null,Nimbus.realtime.folder['binary_files'].id)
-					
+			
 		remove_share : (user)->
 			# remove permission with permission id
 			Nimbus.Share.remove_share_user_real(user.id,(res)->
