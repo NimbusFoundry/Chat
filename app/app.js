@@ -12,7 +12,7 @@
     config = {};
     config.appName = 'Chat';
     config.plugins = {
-      user: 'core/plugins/user',
+      users: 'app/plugins/users',
       workspaces: 'app/plugins/workspaces',
       support: 'core/plugins/support',
       chat: 'app/plugins/chat'
@@ -42,10 +42,13 @@
     }
   };
 
+  foundry.plugin_load_completed = function(){
+    foundry._plugins.workspaces.title = 'Manage Rooms';
+  }
+
   foundry.ready(function() {
     if (Nimbus.Auth.authorized()) {
       foundry.init(function() {
-        foundry._plugins.workspaces.title = 'Manage Rooms'
         $('#loading').addClass('loaded');
         return $("#login_buttons").removeClass("redirect");
       });
