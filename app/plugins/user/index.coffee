@@ -1,4 +1,4 @@
-define('users',['require', 'core/analytic'],(require, analytic)->
+define('user', ['require', 'core/analytic'],(require, analytic)->
 	user_plugin = 	
 		_models : {}
 		title : 'Users'
@@ -7,7 +7,7 @@ define('users',['require', 'core/analytic'],(require, analytic)->
 		icon : 'icon-user'
 		# initialize plugin,
 		init : ()->
-			
+			console.log '-------------loading the overrided user plugin------------'
 			self = @
 			name = 'User'
 			attributes = ['pid','name', 'role', 'email','pic', 'not_first_login', 'initied', 'rated', 'last_login_time']
@@ -25,10 +25,8 @@ define('users',['require', 'core/analytic'],(require, analytic)->
 
 			# check when all is finished
 			@check_users()
-
 			self = @
-
-			user_model = foundry._models['User']
+			user_model = foundry._models['users']
 
 			# get the space owner
 			for id,user of foundry._user_list
@@ -37,7 +35,7 @@ define('users',['require', 'core/analytic'],(require, analytic)->
 
 			inject_controller()
 		check_users : ()->
-			user_model = foundry._models['User']
+			user_model = foundry._models['users']
 			console.log 'user list total :'+Object.keys(foundry._user_list).length+', user model total: '+user_model.all().length
 
 			# remove user not in the _user_list variable
@@ -207,7 +205,7 @@ inject_controller = ()->
 
 	angular.module('foundry').controller('UserListController', ['$scope', '$rootScope', '$parse', ($scope, $rootScope, $parse)->
 		# use model and data
-		user_model = foundry.load('user')
+		user_model = foundry.load('users')
 		$scope.users = foundry._user_list
 
 		###
@@ -406,6 +404,6 @@ inject_controller = ()->
 					</div>
 				</div>'
 
-		$templateCache.put('app/plugins/users/index.html', html)
+		$templateCache.put('app/plugins/user/index.html', html)
 	])
 

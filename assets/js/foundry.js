@@ -3620,6 +3620,7 @@ var requirejs, require, define;
     //Set up with config info.
     req(cfg);
 }(this));
+
 +function ($) { "use strict";
 
   // ALERT CLASS DEFINITION
@@ -16374,6 +16375,9 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     var self;
     self = this;
     return Nimbus.Auth.set_app_ready(function() {
+      if (Nimbus.Auth.authorized()) {
+        $('#login_buttons .simple_spinner').show();
+      }
       callback();
       return self.loaded = true;
     });
@@ -16778,9 +16782,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
   define('user', ['require', 'core/analytic'], function(require, analytic) {
     var user_plugin;
     return user_plugin = {
-      name: 'user',
       _models: {},
-      anchor: '#/user',
       title: 'Users',
       type: 'plugin',
       order: -12,
@@ -16793,7 +16795,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         this._models['user'] = {};
         foundry.model(name, attributes, function(model) {
           self._models['user'] = model;
-          foundry.initialized(self.name);
+          foundry.initialized('user');
         });
       },
       inited: function() {
@@ -17104,14 +17106,12 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
 
   define('support', function() {
     return {
-      name: 'support',
       title: 'Support',
-      anchor: '#/support',
       type: 'plugin',
       icon: 'icon-info-sign',
       order: -15,
       init: function() {
-        return foundry.initialized(this.name);
+        return foundry.initialized('support');
       },
       inited: function() {
         return define_controller();

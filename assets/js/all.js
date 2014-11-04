@@ -6166,6 +6166,8 @@
         if (callback) {
           return callback();
         }
+      }, function(err){
+        console.log('permissions error: ',err)
       });
       localStorage['state'] = 'Working';
 
