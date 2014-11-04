@@ -6166,8 +6166,6 @@
         if (callback) {
           return callback();
         }
-      }, function(err){
-        console.log('permissions error: ',err)
       });
       localStorage['state'] = 'Working';
 
@@ -6314,9 +6312,10 @@
       2. register with this email - todo
      */
     client.add_share_user_real = function(email, callback) {
-      var item, node, workspace;
+      var allows, item, node, workspace;
       workspace = Nimbus.realtime.c_file;
       node = "workspaces/" + workspace.id + "/users/";
+      allows = "workspaces/" + workspace.id + "/allows/";
       item = {
         pid: email,
         id: email,
@@ -6324,7 +6323,7 @@
         "name": email,
         permissionId: email
       };
-      return server.child(node).transaction(function(data) {
+      server.child(node).transaction(function(data) {
         var index, insert, user;
         insert = true;
         for (index in data) {
@@ -6339,6 +6338,43 @@
         }
         if (callback) {
           callback(item);
+        }
+        return data;
+      });
+      return server.child(allows).transaction(function(data) {
+        var index, val;
+        if (!data) {
+          data = [];
+        } else {
+          for (index in data) {
+            val = data[index];
+            if (val === email) {
+              return data;
+            }
+          }
+        }
+        data[data.length] = email;
+        return data;
+      });
+    };
+
+    /*
+      1.
+     */
+    client.remove_share_user_real = function(email, callback) {
+      var node, workspace;
+      workspace = Nimbus.realtime.c_file;
+      node = "workspaces/" + workspace.id + "/users/";
+      return server.child(node).transaction(function(data) {
+        var index, user;
+        for (index in data) {
+          user = data[index];
+          if (user.email === email) {
+            data.splice(index);
+          }
+        }
+        if (callback) {
+          callback();
         }
         return data;
       });

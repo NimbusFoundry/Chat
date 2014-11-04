@@ -27,7 +27,7 @@
         analytic.init();
         this.check_users();
         self = this;
-        user_model = foundry._models['users'];
+        user_model = foundry._models['User'];
         _ref = foundry._user_list;
         for (id in _ref) {
           user = _ref[id];
@@ -39,7 +39,7 @@
       },
       check_users: function() {
         var data, one, pid, user, user_model, _i, _len, _ref, _ref1;
-        user_model = foundry._models['users'];
+        user_model = foundry._models['User'];
         console.log('user list total :' + Object.keys(foundry._user_list).length + ', user model total: ' + user_model.all().length);
         _ref = user_model.all();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -323,7 +323,7 @@
       '$templateCache', function($templateCache) {
         var html;
         html = '<div ng-controller="UserListController"> <div class="breadcrumb"> <h1 ng-bind="breadcum"></h1> <div class="pull-right"> <a class="btn outline" ng-click="add_shortcut()">Add User</a> </div> </div> <div class="container-fluid"> <div class="row-fluid"> <div class="well-content"> <div> <table class="table"> <thead> <tr> <th>Current Users</th> </tr> </thead> <tbody> <tr ng-repeat="user in users"> <td> <div class="user_listing"> <img class="pic" ng-src="{{user.pic || ' + "'assets/img/photo.jpg'" + '}}" /> <span class="name">{{user.name}}</span><span class="pill">{{user.roleName || ' + "'Viewer'" + '}}</span> <span class="badge badge-info" ng-if="is_owner(user)" style="border-radius: 5px;padding: 3px 5px;position: relative;top: -2px;text-transform: uppercase;">Owner</span> <div class="pull-right list_menu"> <a class="btn outline narrow" ng-click="edit_user(user.id)" ng-show="user_permission==' + "'Admin'" + '">edit</a> <a class="btn outline narrow" ng-click="show_user(user.id)">show</a> <a class="btn outline narrow" confirm on-confirm="del_user(user.id)" ng-show="user_permission==' + "'Admin'" + '"><i class="icon-trash" ></i></a> </div> </div> </td> </tr> </tbody> </table> </div> <div class="form modal fade nimbus_form_modal"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" aria-hidden="true" ng-click="clear()">&times;</button> <h4 class="modal-title">User Form</h4> </div> <div class="modal-body"> <model-form model-name="usermodel" form-mode="form_mode" instance-name="user_data" on-create="submit()" on-update="update()"></model-form> </div> </div><!-- /.modal-content --> </div><!-- /.modal-dialog --> </div> <div class="update_form modal fade nimbus_form_modal"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" aria-hidden="true" ng-click="clear()">&times;</button> <h4 class="modal-title">User Form</h4> </div> <div class="modal-body"> <model-form model-name="userEditModel" form-mode="form_mode" instance-name="user_data" on-create="submit()" on-update="update()"></model-form> </div> </div><!-- /.modal-content --> </div><!-- /.modal-dialog --> </div> <div class="modal fade userinfo"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" aria-hidden="true" ng-click="clear()">&times;</button> <h4 class="modal-title" >User Info</h4> </div> <div class="modal-body"> <dl class="dl-horizontal" id="user_form"> <dt>Name :<dt> <dd>{{user_info.name}}</dd> <dt>Email : </dt><dd>{{user_info.email}}</dd> </dl> </div> </div><!-- /.modal-content --> </div><!-- /.modal-dialog --> </div> </div> </div> </div> </div>';
-        return $templateCache.put('app/plugins/user/index.html', html);
+        return $templateCache.put('app/plugins/users/index.html', html);
       }
     ]);
   };

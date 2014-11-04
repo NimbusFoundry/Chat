@@ -26,7 +26,7 @@ define('users', ['require', 'core/analytic'],(require, analytic)->
 			# check when all is finished
 			@check_users()
 			self = @
-			user_model = foundry._models['users']
+			user_model = foundry._models['User']
 
 			# get the space owner
 			for id,user of foundry._user_list
@@ -35,7 +35,7 @@ define('users', ['require', 'core/analytic'],(require, analytic)->
 
 			inject_controller()
 		check_users : ()->
-			user_model = foundry._models['users']
+			user_model = foundry._models['User']
 			console.log 'user list total :'+Object.keys(foundry._user_list).length+', user model total: '+user_model.all().length
 
 			# remove user not in the _user_list variable
@@ -404,6 +404,6 @@ inject_controller = ()->
 					</div>
 				</div>'
 
-		$templateCache.put('app/plugins/user/index.html', html)
+		$templateCache.put('app/plugins/users/index.html', html)
 	])
 
