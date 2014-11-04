@@ -1,4 +1,4 @@
-define('user', ['require', 'core/analytic'],(require, analytic)->
+define('users', ['require', 'core/analytic'],(require, analytic)->
 	user_plugin = 	
 		_models : {}
 		title : 'Users'
