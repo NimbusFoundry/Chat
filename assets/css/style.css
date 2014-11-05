@@ -11,7 +11,7 @@
 	margin: 10px;
 	display: block;
 }
-.chat-list, .user-list{
+.chat-list, .chat-plugin .user-list{
 	position: absolute;
 	height: 100%;
 }
@@ -72,7 +72,7 @@
 	outline: none;
 }
 
-.chat-list .list, .user-list ul{
+.chat-list .list, .chat-plugin .user-list ul{
 	margin-top: 60px;
 }
 .chat-list .list .msg{
@@ -145,15 +145,15 @@
 	border-radius: 25px;
 }
 
-.user-list{
+.chat-plugin .user-list{
 	right: 0;
 	background: #fff;
 }
-.user-list ul{
+.chat-plugin .user-list ul{
 	list-style: none;
 	margin-left: 10px;
 }
-.user-list ul>li{
+.chat-plugin .user-list ul>li{
 	padding: 0px 0px 10px 0px;
 }
 

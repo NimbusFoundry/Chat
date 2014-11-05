@@ -102,7 +102,7 @@ define_controller = ()->
 					<div class="breadcrumb absolute">
 				        <h1>Chat Room</h1>
 				    </div>  
-					<div class="container-fluid">
+					<div class="container-fluid chat-plugin">
 						<div class="row-fluid">
 						
 							<!-- message list  -->
