@@ -1,18 +1,5 @@
 /*global module:false*/
 module.exports = function(grunt) {
-  coffeeFiles = [
-  'forum/plugins/account/index.coffee',
-  'forum/plugins/forum/components/todolist/index.coffee',
-  'forum/plugins/forum/components/example/index.coffee',
-  'forum/plugins/forum/index.coffee',
-  'forum/app.coffee',
-  'core/directives/directives.coffee' 
-
-  ]
-  coffeeForCompile = coffeeFiles.reduce(function (pre, current, idx) {
-    pre[current.replace(/coffee/,"js")] = current;
-    return pre;
-  }, {});
   // Project configuration.
   grunt.initConfig({
     // Metadata.
@@ -24,14 +11,14 @@ module.exports = function(grunt) {
         banner: '<%= banner %>',
         stripBanners: true
       },
-      dist: {
+      app: {
         src: [
-              'vendor/all-vendor.js',
-              'dist/mailComposer.min.js',
-              // 'dist/app.js',
-              'vendor/core.js'
-              ],
-        dest: 'dist/main.js'
+          'app/plugins/chat/*.js',
+          'app/plugins/users/*.js',
+          'app/plugins/workspaces/*.js',
+          'app/app.js'
+        ],
+        dest: 'assets/js/main.js'
       }
     },
     uglify: {
@@ -79,13 +66,6 @@ module.exports = function(grunt) {
         files: '<%= jshint.lib_test.src %>',
         tasks: ['jshint:lib_test', 'nodeunit']
       },
-      coffeeScripts: {
-        files: coffeeFiles,
-        tasks: ['coffee','concat'],
-        options: {
-          spawn: false,
-        }
-      },
       js: {
         files: [
           'vendor/bootstrap-wysihtml5/js/custom_image_and_upload_wysihtml5.js',
@@ -96,12 +76,7 @@ module.exports = function(grunt) {
           spawn: false,
         }
       }
-    },
-    coffee: {
-      jason: {
-        files: coffeeForCompile
-      }
-    },
+    }
   });
 
   // These plugins provide necessary tasks.
@@ -111,11 +86,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-coffee');
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'nodeunit', 'concat', 'uglify']);
 
-  grunt.registerTask('build', ['concat', 'uglify']);
+  grunt.registerTask('build', ['concat']);
 
 };

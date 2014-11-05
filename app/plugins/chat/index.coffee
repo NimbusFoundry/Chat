@@ -96,3 +96,63 @@ define_controller = ()->
 
 #window.onresize = ()->
 #	$('.list').css({'max-height': $('.chat-list').height()-150})
+	angular.module('foundry').run(['$templateCache', ($templateCache)->
+		html = '<link rel="stylesheet" href="app/plugins/chat/style.css">
+				<div ng-controller="ChatController">
+					<div class="breadcrumb absolute">
+				        <h1>Chat Room</h1>
+				    </div>  
+					<div class="container-fluid">
+						<div class="row-fluid">
+						
+							<!-- message list  -->
+							<div class="chat-list span8">
+								<div class="list">
+									<div ng-repeat="message in messages" class="msg" ng-class="{mine:is_mine_message(message)}">
+										<div class="avatar">
+											<img ng-src="{{message.avatar || '+"'assets/img/photo.jpg'"+'}}" alt="">
+										</div>
+										<div class="message-content">
+											<p ng-bind="message.content" class="content" ng-if="message.content">
+												
+											</p>
+											<p ng-if="message.image">
+												<!-- image template -->
+											</p>
+											<p ng-if="message.file">
+												<!-- file template -->
+											</p>
+											<p class="muted">
+												<strong ng-bind="message.userName" class="bold"></strong> •
+												<span ng-bind="message.local|date:'+"'MM-dd HH:mm:ss'"+'"></span>
+											</p>
+										</div>
+
+									</div>
+								</div>
+								<div class="send-box">
+									<div class="send-container">
+										<textarea ng-model="message">
+											
+										</textarea>
+										<button type="button" ng-click="send()" value="Send">Send</button>
+									</div>
+								</div>
+							</div>
+							<!-- online user list -->
+							<div class="user-list span4" style="margin-top: 10px;">
+								
+								<ul style="list-style:none;">
+									<p style="font-weight: bold; color: #777;">Current people: </p>
+									<li ng-repeat="user in collaborators|orderBy:'+"'displayName'"+'">
+										<!-- user list template -->
+										<img ng-src="{{user.photoUrl}}" alt="" style="max-width: 50px;">
+										<span ng-bind="user.displayName"></span>
+									</li>
+								</ul>
+							</div>
+				    	</div>
+					</div>
+				</div>'
+		$templateCache.put('app/plugins/chat/index.html', html)
+	])
