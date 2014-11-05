@@ -97,7 +97,7 @@ define_controller = ()->
 #window.onresize = ()->
 #	$('.list').css({'max-height': $('.chat-list').height()-150})
 	angular.module('foundry').run(['$templateCache', ($templateCache)->
-		html = '<link href="https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/css/style.css">
+		html = '<link rel="stylesheet" href="https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/css/style.css">
 				<div ng-controller="ChatController">
 					<div class="breadcrumb absolute">
 				        <h1>Chat Room</h1>
