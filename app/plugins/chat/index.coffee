@@ -97,8 +97,7 @@ define_controller = ()->
 #window.onresize = ()->
 #	$('.list').css({'max-height': $('.chat-list').height()-150})
 	angular.module('foundry').run(['$templateCache', ($templateCache)->
-		html = '<link rel="stylesheet" href="app/plugins/chat/style.css">
-				<div ng-controller="ChatController">
+		html = '<div ng-controller="ChatController">
 					<div class="breadcrumb absolute">
 				        <h1>Chat Room</h1>
 				    </div>  
@@ -110,7 +109,7 @@ define_controller = ()->
 								<div class="list">
 									<div ng-repeat="message in messages" class="msg" ng-class="{mine:is_mine_message(message)}">
 										<div class="avatar">
-											<img ng-src="{{message.avatar || '+"'assets/img/photo.jpg'"+'}}" alt="">
+											<img ng-src="{{message.avatar || '+"' https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/img/photo.jpg'"+'}}" alt="">
 										</div>
 										<div class="message-content">
 											<p ng-bind="message.content" class="content" ng-if="message.content">

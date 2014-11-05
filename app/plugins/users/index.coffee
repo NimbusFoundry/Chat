@@ -341,7 +341,7 @@ inject_controller = ()->
 									        <tr ng-repeat="user in users">
 									            <td>
 									            	<div class="user_listing">
-									            		<img class="pic" ng-src="{{user.pic || '+"'assets/img/photo.jpg'"+'}}" />
+									            		<img class="pic" ng-src="{{user.pic || '+"' https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/img/photo.jpg'"+'}}" />
 									            		<span class="name">{{user.name}}</span><span class="pill">{{user.roleName || '+"'Viewer'"+'}}</span>
 									            		<span class="badge badge-info" ng-if="is_owner(user)" style="border-radius: 5px;padding: 3px 5px;position: relative;top: -2px;text-transform: uppercase;">Owner</span>
 									            		<div class="pull-right list_menu">
