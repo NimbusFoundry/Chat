@@ -73,7 +73,7 @@
             userName: foundry._current_user.name || foundry._current_user.displayName,
             content: $scope.message,
             ts: now.getTime() + now.getTimezoneOffset() * 60000,
-            avatar: $scope.me.photoUrl || 'assets/img/photo.jpg',
+            avatar: $scope.me.photoUrl || 'https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/img/photo.jpg',
             local: now.getTime()
           };
           messageModel.create(data);
