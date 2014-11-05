@@ -5826,9 +5826,9 @@
     workspaceId = '';
 
     /*
-      1. try get firebase workspace root
-      2. set server as the pool node for workspace
-      3. should be called again when the workspace is changed
+    	1. try get firebase workspace root
+    	2. set server as the pool node for workspace
+    	3. should be called again when the workspace is changed
      */
     base._setup = function() {
       root = Nimbus.Firebase.server;
@@ -5848,15 +5848,15 @@
     };
 
     /*
-      * firebase uses json ojbect
-      currently only return the original object
+    	* firebase uses json ojbect
+    	currently only return the original object
      */
     base.toCloudStructure = function(data) {
       return JSON.parse(JSON.stringify(data));
     };
 
     /*
-      currently only return the original object
+    	currently only return the original object
      */
     base.fromCloudStructure = function(data) {
       return JSON.parse(JSON.stringify(data));
@@ -5864,7 +5864,7 @@
     base.diff_objects = function(previous, current) {};
 
     /*
-        basic sync_all implementation
+    		basic sync_all implementation
      */
     base.sync_all = function(callback) {
       var _handle;
@@ -5878,8 +5878,8 @@
     };
 
     /*
-      1. using once to get all value
-      2. add value change event for futher uses
+    	1. using once to get all value
+    	2. add value change event for futher uses
      */
     base.load_all_from_cloud = function(complete) {
       var name, _handle;
@@ -5902,7 +5902,7 @@
     };
 
     /*
-      1. trigger localsync model to save to localstorage
+    	1. trigger localsync model to save to localstorage
      */
     base.add_from_cloud = function(id, callback) {
       var obj, x;
@@ -5913,7 +5913,7 @@
     };
 
     /*
-      1. try update the local data using update method
+    	1. try update the local data using update method
      */
     base.update_to_local = function(object, callback) {
       var data, x;
@@ -5926,8 +5926,8 @@
     };
 
     /*
-      1. this is almost the same for update to cloud
-      local is the same
+    	1. this is almost the same for update to cloud
+    	local is the same
      */
     base.add_to_cloud = function(object, callback) {
       var data, id;
@@ -5947,14 +5947,14 @@
     };
 
     /*
-      1. remove data on the cloud
+    	1. remove data on the cloud
      */
     base.delete_from_cloud = function(id, callback) {
       return server.child(id).remove();
     };
 
     /*
-      1. process call chain
+    	1. process call chain
      */
     base.process_call_chain = function(mod, obj, isLocal) {
       var event, index, _ref;
@@ -5967,8 +5967,8 @@
 
     /*
     
-      1. this is quite different from realtime
-      we need to observe from the start for every key
+    	1. this is quite different from realtime
+    	we need to observe from the start for every key
      */
     base.onUpdate = function(callback) {
       realtimeEvents = Nimbus.Firebase.realtimeEvents;
@@ -5979,7 +5979,7 @@
     };
 
     /*
-      extend method when firebase is initialized
+    	extend method when firebase is initialized
      */
     base.extended = function() {
       this.sync(this.proxy(this.real_time_sync));
@@ -5997,7 +5997,7 @@
     currentWorkspace = '';
 
     /*
-      1. create array from a dictionary object
+    	1. create array from a dictionary object
      */
     obj_to_array = function(obj) {
       var item, key, res;
@@ -6011,14 +6011,14 @@
     };
 
     /*
-      1. set the server
+    	1. set the server
      */
     obj.setServer = function() {
       var getCollaborators;
       server = Nimbus.Firebase.server;
 
       /*
-           1.will check if server is online or offline - todo
+      		 1.will check if server is online or offline - todo
        */
       getCollaborators = function(callback) {
         var login;
@@ -6041,7 +6041,7 @@
     };
 
     /*
-      1. monitor data in workspace
+    	1. monitor data in workspace
      */
     obj.watch_workspace = function(id) {
       var apply_to_model, event, isLocal, realtimeEvents;
@@ -6091,9 +6091,9 @@
     };
 
     /*
-      1. bind the workspace for model
-      2. set user in new workspace alive
-      3. remove the user in the old workspace
+    	1. bind the workspace for model
+    	2. set user in new workspace alive
+    	3. remove the user in the old workspace
      */
     obj.bind_workspace = function(id) {
       var login;
@@ -6132,8 +6132,8 @@
     };
 
     /*
-      1. initialize the workspace if authorization is 
-      fullfilled.
+    	1. initialize the workspace if authorization is 
+    	fullfilled.
      */
     obj.init_workspace = function(callback) {
       var self, user;
@@ -6170,7 +6170,7 @@
       localStorage['state'] = 'Working';
 
       /*
-          a. monitoring workspace changes and save to app_files
+      		a. monitoring workspace changes and save to app_files
        */
       return server.child('workspaces').on('value', function(res) {
         return Nimbus.realtime.app_files = obj_to_array(res.val());
@@ -6178,7 +6178,7 @@
     };
 
     /*
-      1. primary authentication method for firebase
+    	1. primary authentication method for firebase
      */
     obj.authenticate_firebase = function(p, d) {
       var auth, authHandler, data, provider;
@@ -6204,8 +6204,8 @@
     };
 
     /*
-      1. init firebase 
-      2. the app ready func should be called before the auth is done?
+    	1. init firebase 
+    	2. the app ready func should be called before the auth is done?
      */
     obj.initialize_firebase = function() {
       var self;
@@ -6222,9 +6222,7 @@
             });
           } else {
             console.log('failed');
-            self.auth_callback(authData);
-            Nimbus.Auth.app_ready = true;
-            return Nimbus.Auth.app_ready_func();
+            return self.auth_callback(authData);
           }
         });
         return authObserved = true;
@@ -6232,7 +6230,7 @@
     };
 
     /*
-      1. check if the user is authorized
+    	1. check if the user is authorized
      */
     obj.firebase_authorized = function() {
       var authData;
@@ -6241,7 +6239,7 @@
     };
 
     /*
-      1. sign out the current user
+    	1. sign out the current user
      */
     obj.logout = function() {
       return server.unauth();
@@ -6264,7 +6262,7 @@
     };
 
     /*
-      1. switch workspace
+    	1. switch workspace
      */
     client.switch_to_app_file_real = function(id, callback) {
       var node;
@@ -6290,7 +6288,7 @@
     };
 
     /*
-      Register user and send email
+    	Register user and send email
      */
     register_user = function(email, callback) {
       return server.createUser({
@@ -6304,12 +6302,12 @@
     };
 
     /*
-      send email with the password - todo
+    	send email with the password - todo
      */
 
     /*
-      1. add share user
-      2. register with this email - todo
+    	1. add share user
+    	2. register with this email - todo
      */
     client.add_share_user_real = function(email, callback) {
       var allows, item, node, workspace;
@@ -6359,7 +6357,7 @@
     };
 
     /*
-      1.
+    	1.
      */
     client.remove_share_user_real = function(email, callback) {
       var node, workspace;
@@ -6381,7 +6379,7 @@
     };
 
     /*
-      1. get_user_email for password login
+    	1. get_user_email for password login
      */
     client.get_user_email = function() {
       var user;
@@ -6390,7 +6388,7 @@
     };
 
     /*
-      1. return the constructed user object for share
+    	1. return the constructed user object for share
      */
     client.get_current_user = function(callback) {
       var me, user;
@@ -6408,7 +6406,7 @@
     };
 
     /*
-      1. get_shared_users return user list in workspaces/workspaceId/users
+    	1. get_shared_users return user list in workspaces/workspaceId/users
      */
     client.get_shared_users_real = function(callback) {
       var node, workspace;
@@ -6427,7 +6425,7 @@
     };
 
     /*
-      1. create a workspace - todo
+    	1. create a workspace - todo
      */
     client.create_workspace = function(title, callback) {
       var email, id, owner, path, user, workspace;
@@ -6462,8 +6460,8 @@
     };
 
     /*
-      1. delete workspace itself
-         delete workspace pool data
+    	1. delete workspace itself
+    	   delete workspace pool data
      */
     client.deleteFile = function(id, callback) {
       var file, index, _ref, _results;
