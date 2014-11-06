@@ -366,8 +366,8 @@ inject_controller = ()->
 									      <div class="modal-body">
 									        <model-form model-name="usermodel" form-mode="form_mode" instance-name="user_data" on-create="submit()" on-update="update()"></model-form>
 									      </div>
-									    </div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
+									    </div>
+									</div>
 								</div>
 								<div class="update_form modal fade nimbus_form_modal">
 									<div class="modal-dialog">
@@ -379,8 +379,8 @@ inject_controller = ()->
 									      <div class="modal-body">
 									        <model-form model-name="userEditModel" form-mode="form_mode" instance-name="user_data" on-create="submit()" on-update="update()"></model-form>
 									      </div>
-									    </div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
+									    </div>
+									</div>
 								</div>
 								<div class="modal fade userinfo">
 									<div class="modal-dialog">
@@ -396,8 +396,8 @@ inject_controller = ()->
 								        			<dt>Email : </dt><dd>{{user_info.email}}</dd>
 									        	</dl>
 									      </div>
-									    </div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
+									    </div>
+									</div>
 								</div>
 							</div>
 					    </div>

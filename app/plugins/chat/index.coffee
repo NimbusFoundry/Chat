@@ -104,8 +104,6 @@ define_controller = ()->
 				    </div>  
 					<div class="container-fluid chat-plugin">
 						<div class="row-fluid">
-						
-							<!-- message list  -->
 							<div class="chat-list span8">
 								<div class="list">
 									<div ng-repeat="message in messages" class="msg" ng-class="{mine:is_mine_message(message)}">
@@ -117,10 +115,8 @@ define_controller = ()->
 												
 											</p>
 											<p ng-if="message.image">
-												<!-- image template -->
 											</p>
 											<p ng-if="message.file">
-												<!-- file template -->
 											</p>
 											<p class="muted">
 												<strong ng-bind="message.userName" class="bold"></strong> •
@@ -139,7 +135,6 @@ define_controller = ()->
 									</div>
 								</div>
 							</div>
-							<!-- online user list -->
 							<div class="user-list span4" style="margin-top: 10px;">
 								
 								<ul style="list-style:none;">

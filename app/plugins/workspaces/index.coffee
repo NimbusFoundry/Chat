@@ -337,8 +337,8 @@ define_controller = ()->
 			                        </form>
 			                        <button type="button" class="btn btn-primary" ng-click="create_doc()">Create</button>
 			                      </div>
-			                    </div><!-- /.modal-content -->
-			                </div><!-- /.modal-dialog -->
+			                    </div>
+			                </div>
 			            </div>
 			        </script>
 			        <script type="text/ng-template" id="rename">
@@ -357,8 +357,8 @@ define_controller = ()->
 			                        </form>
 			                        <button type="button" class="btn btn-primary" ng-click="rename()">Rename</button>
 			                      </div>
-			                    </div><!-- /.modal-content -->
-			                </div><!-- /.modal-dialog -->
+			                    </div>
+			                </div>
 			            </div>
 			        </script>
 			        <script type="text/ng-template" id="swithing">
