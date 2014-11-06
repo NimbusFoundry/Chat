@@ -6072,6 +6072,9 @@
         event = 'UPDATE';
         obj = res.val();
         model = Nimbus.dictModel[obj.type];
+        if (!model) {
+          return;
+        }
         model.update_to_local(obj);
         return apply_to_model(event, res, isLocal);
       });
