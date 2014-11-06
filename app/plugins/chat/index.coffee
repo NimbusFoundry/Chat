@@ -89,9 +89,9 @@ define_controller = ()->
 			$scope.get_gravatar = (uid)->
 				user = foundry._user_list[uid]
 				if user
-					return 'http://www.gravatar.com/avatar/'+md5(user.email)
+					return 'http://www.gravatar.com/avatar/'+md5(user.email)+'?d=mm'
 				else
-					return 'http://www.gravatar.com/avatar/00000000000000000000000000000000'
+					return 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm'
 
 			# add event for user
 			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);

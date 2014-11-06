@@ -93,9 +93,9 @@
           var user;
           user = foundry._user_list[uid];
           if (user) {
-            return 'http://www.gravatar.com/avatar/' + md5(user.email);
+            return 'http://www.gravatar.com/avatar/' + md5(user.email) + '?d=mm';
           } else {
-            return 'http://www.gravatar.com/avatar/00000000000000000000000000000000';
+            return 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm';
           }
         };
         return $scope.load();
