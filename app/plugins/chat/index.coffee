@@ -86,6 +86,13 @@ define_controller = ()->
 				sync_collaborators()
 				$scope.$apply()
 
+			$scope.get_gravatar = (uid)->
+				user = foundry._user_list[uid]
+				if user
+					return 'http://www.gravatar.com/avatar/'+md5(user.email)
+				else
+					return 'http://www.gravatar.com/avatar/00000000000000000000000000000000'
+
 			# add event for user
 			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
 			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
@@ -97,8 +104,7 @@ define_controller = ()->
 #window.onresize = ()->
 #	$('.list').css({'max-height': $('.chat-list').height()-150})
 	angular.module('foundry').run(['$templateCache', ($templateCache)->
-		html = '
-				<div ng-controller="ChatController">
+		html = '<div ng-controller="ChatController">
 					<div class="breadcrumb absolute">
 				        <h1>Chat Room</h1>
 				    </div>  
@@ -108,7 +114,7 @@ define_controller = ()->
 								<div class="list">
 									<div ng-repeat="message in messages" class="msg" ng-class="{mine:is_mine_message(message)}">
 										<div class="avatar">
-											<img ng-src="{{message.avatar || '+"'https://raw.githubusercontent.com/NimbusFoundry/Chat/firebase/assets/img/photo.jpg'"+'}}" alt="">
+											<img ng-src="{{get_gravatar(message.userId)}}" alt="">
 										</div>
 										<div class="message-content">
 											<p ng-bind="message.content" class="content" ng-if="message.content">
