@@ -6431,6 +6431,7 @@
     	1. sign out the current user
      */
     obj.logout = function() {
+      localStorage.clear();
       return server.unauth();
     };
     obj.auth_changed = function(cb) {
