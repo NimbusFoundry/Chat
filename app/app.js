@@ -70,6 +70,36 @@
       });
       return false;
     });
+
+    $('#firebase_register_btn').on('click', function(evt) {
+      evt.preventDefault();
+
+      if(!$('.login-form input[name="email"]').val() || !$('.login-form input[name="passwd"]').val()){
+        return false;
+      }
+
+      // setup first
+      Nimbus.Auth.sync_services.Firebase.service = 'Firebase';
+      Nimbus.Auth.setup(JSON.stringify(Nimbus.Auth.sync_services.Firebase));
+
+      // register
+      (function(){
+        var server = Nimbus.Firebase.server;
+        server.createUser({
+          'email' : $('.login-form input[name="email"]').val(),
+          'password' : $('.login-form input[name="passwd"]').val()
+        }, function(err){
+          if (!err) {
+            bootbox.alert('Your account has been created, you can sign in now.', function(){
+              location.reload();
+            });
+          }else{
+            bootbox.alert('Register Error: '+err.message);
+          };
+        });
+      })()
+
+    });
     $('.logout_btn').on('click', function(evt) {
       foundry.logout();
       return location.reload();
