@@ -48,6 +48,8 @@
 
   foundry.ready(function() {
     if (Nimbus.Auth.authorized()) {
+      $('#loading .identity-form').slideUp('fast');
+
       foundry.init(function() {
         $('#loading').addClass('loaded');
         return $("#login_buttons").removeClass("redirect");
@@ -62,7 +64,7 @@
       return false;
     });
 
-    $('.login-form-toggle').on('click', function(evt){
+    $('.identity-form-toggle').on('click', function(evt){
       evt.preventDefault();
       $('.l-form-container').animate({top:'0px'})
       return false;
@@ -71,13 +73,13 @@
     $('#firebase_login_btn').on('click', function(evt) {
       evt.preventDefault();
       // check email and password
-      if(!$('.login-form input[name="email"]').val() || !$('.login-form input[name="passwd"]').val()){
+      if(!$('.identity-form input[name="email"]').val() || !$('.identity-form input[name="passwd"]').val()){
         return false;
       }
 
       Nimbus.Auth.authorize('Firebase', {
-        'email' : $('.login-form input[name="email"]').val(),
-        'password': $('.login-form input[name="passwd"]').val(),
+        'email' : $('.identity-form input[name="email"]').val(),
+        'password': $('.identity-form input[name="passwd"]').val(),
         'provider': 'password'
       });
       return false;
@@ -86,7 +88,7 @@
     $('#firebase_register_btn').on('click', function(evt) {
       evt.preventDefault();
 
-      if(!$('.login-form input[name="register"]').val() || !$('.login-form input[name="password"]').val()){
+      if(!$('.identity-form input[name="register"]').val() || !$('.identity-form input[name="password"]').val()){
         return false;
       }
 
@@ -98,8 +100,8 @@
       (function(){
         var server = Nimbus.Firebase.server,
             data = {
-              'email' : $('.login-form input[name="register"]').val(),
-              'password' : $('.login-form input[name="password"]').val()
+              'email' : $('.identity-form input[name="register"]').val(),
+              'password' : $('.identity-form input[name="password"]').val()
             }
 
         server.createUser(data, function(err){
