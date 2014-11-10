@@ -792,6 +792,18 @@
   });
 
   $(document).ready(function() {
+    $('.register-form-toggle').on('click', function(evt){
+      evt.preventDefault();
+      $('.l-form-container').animate({top:'-146px'})
+      return false;
+    });
+
+    $('.login-form-toggle').on('click', function(evt){
+      evt.preventDefault();
+      $('.l-form-container').animate({top:'0px'})
+      return false;
+    });
+
     $('#firebase_login_btn').on('click', function(evt) {
       evt.preventDefault();
       // check email and password
