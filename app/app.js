@@ -96,21 +96,29 @@
 
       // register
       (function(){
-        var server = Nimbus.Firebase.server;
-        server.createUser({
-          'email' : $('.login-form input[name="register"]').val(),
-          'password' : $('.login-form input[name="password"]').val()
-        }, function(err){
+        var server = Nimbus.Firebase.server,
+            data = {
+              'email' : $('.login-form input[name="register"]').val(),
+              'password' : $('.login-form input[name="password"]').val()
+            }
+
+        server.createUser(data, function(err){
           if (!err) {
             bootbox.alert('Your account has been created, you can sign in now.', function(){
-              location.reload();
+              // try login directly
+              console.log('login');
+              Nimbus.Auth.authorize('Firebase', {
+                'email' : data.email,
+                'password': data.password,
+                'provider': 'password'
+              });
             });
           }else{
             bootbox.alert('Register Error: '+err.message);
           };
         });
       })()
-
+      return false;
     });
     $('.logout_btn').on('click', function(evt) {
       foundry.logout();
