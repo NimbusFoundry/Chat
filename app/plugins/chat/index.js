@@ -33,7 +33,9 @@
         messageModel = foundry._models['Message'];
         messageModel.onUpdate(function(mode, obj, isLocal) {
           $scope.load();
-          return $scope.$apply();
+          if ($scope.$root.$$phase !== '$apply' && $scope.$root.$$phase !== '$digest') {
+            return $scope.$apply();
+          }
         });
         sync_collaborators = function() {
           return Nimbus.realtime.getCollaborators(function(users) {
@@ -60,6 +62,9 @@
             return _results;
           });
           sync_collaborators();
+          $timeout(function() {
+            return $('.list').scrollTop($('.list')[0].scrollHeight);
+          }, 100);
         };
         $scope.send = function() {
           var data, now;

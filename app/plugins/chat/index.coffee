@@ -26,7 +26,9 @@ define_controller = ()->
 			messageModel = foundry._models['Message']
 			messageModel.onUpdate((mode, obj, isLocal)->
 				$scope.load()
-				$scope.$apply()
+				# futher test
+				if $scope.$root.$$phase isnt '$apply' and $scope.$root.$$phase isnt '$digest'
+					$scope.$apply()
 			)
 
 			sync_collaborators = ()->
@@ -52,10 +54,10 @@ define_controller = ()->
 
 				sync_collaborators()
 				# adjust the height
-				#$timeout(()->
-				#	$('.list').css({'max-height': $('.chat-list').height()-160})
-				#	$('.list').scrollTop($('.list')[0].scrollHeight)
-				#, 100)
+				$timeout(()->
+					# $('.list').css({'max-height': $('.chat-list').height()-160})
+					$('.list').scrollTop($('.list')[0].scrollHeight)
+				, 100)
 				
 				return
 			$scope.send = ()->
