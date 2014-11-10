@@ -6370,12 +6370,15 @@
     	1. primary authentication method for firebase
      */
     obj.authenticate_firebase = function(p, d) {
-      var auth, authHandler, data, provider;
+      var auth, authHandler, data, provider, self = this;
       provider = p ? p : Nimbus.Auth.setting.provider;
       data = d ? d : Nimbus.Auth.setting;
       authHandler = function(err, authData) {
         if (authData) {
-
+          self.init_workspace(function(){
+            Nimbus.Auth.app_ready = true;
+            Nimbus.Auth.app_ready_func();
+          });
         } else if (err) {
           return console.log(err);
         }

@@ -64,9 +64,9 @@
       return false;
     });
 
-    $('.identity-form-toggle').on('click', function(evt){
+    $('.login-form-toggle').on('click', function(evt){
       evt.preventDefault();
-      $('.l-form-container').animate({top:'0px'})
+      $('.l-form-container').animate({top:'0px'});
       return false;
     });
 
