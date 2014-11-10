@@ -12,19 +12,19 @@
 			<img id="logo_loading" src="assets/img/chat.png" style="padding: 5px; height: 60px; background-color: #2E8EDB"/>
 			<h1 style="font-size: 1.5em;">Chat(Build on <a target="_blank" href="http://nimbusfoundry.com">NimbusFoundry</a>)</h1>
 
-			<div class="login-form container-fluid" style="margin-top:20px">
-				<div class="row-fluid">
-					<form action="" class="form-inline login">
+			<div class="login-form container-fluid" style="margin-top:20px;height: 126px;overflow: scroll;">
+				<div class="row-fluid l-form-container" style="position: relative;">
+					<form action="" class="login l-form-content">
 						<input type="text" name="email" placeholder="email" style="padding: 7px;">
 						<input type="password" name="passwd" placeholder="password" style="padding: 7px;">
 						<button type="submit" id="firebase_login_btn" class="btn btn-success">Sign In</button>
-						<button type="button" id="firebase_register_btn" class="btn btn-primary">Sign Up</button>
+						<a href="#" data-target="register" class="register-form-toggle">Register an account?</a>
 					</form>
-					<form action="" class="form-inline regist hide">
+					<form action="" class="register l-form-content" style="margin-top:20px;">
 						<input type="text" name="register" placeholder="email" style="padding: 7px;">
-						<input type="passwd" name="passwd" placeholder="password" style="padding: 7px;">
-						<button type="submit" id="firebase_login_btn" class="btn btn-success">Sign In</button>
-						<button type="button" id="firebase_register_btn" class="btn btn-primary">Sign Up</button>
+						<input type="password" name="password" placeholder="password" style="padding: 7px;">
+						<button type="submit" id="firebase_register_btn" class="btn btn-primary">Sign Up</button>
+						<a href="#" data-target="login" class="login-form-toggle">Sign in</a>
 					</form>
 				</div>
 			</div>

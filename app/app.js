@@ -56,6 +56,18 @@
   });
 
   $(document).ready(function() {
+    $('.register-form-toggle').on('click', function(evt){
+      evt.preventDefault();
+      $('.l-form-container').animate({top:'-146px'})
+      return false;
+    });
+
+    $('.login-form-toggle').on('click', function(evt){
+      evt.preventDefault();
+      $('.l-form-container').animate({top:'0px'})
+      return false;
+    });
+
     $('#firebase_login_btn').on('click', function(evt) {
       evt.preventDefault();
       // check email and password
@@ -74,7 +86,7 @@
     $('#firebase_register_btn').on('click', function(evt) {
       evt.preventDefault();
 
-      if(!$('.login-form input[name="email"]').val() || !$('.login-form input[name="passwd"]').val()){
+      if(!$('.login-form input[name="register"]').val() || !$('.login-form input[name="password"]').val()){
         return false;
       }
 
@@ -86,8 +98,8 @@
       (function(){
         var server = Nimbus.Firebase.server;
         server.createUser({
-          'email' : $('.login-form input[name="email"]').val(),
-          'password' : $('.login-form input[name="passwd"]').val()
+          'email' : $('.login-form input[name="register"]').val(),
+          'password' : $('.login-form input[name="password"]').val()
         }, function(err){
           if (!err) {
             bootbox.alert('Your account has been created, you can sign in now.', function(){
