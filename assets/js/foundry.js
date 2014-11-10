@@ -16350,6 +16350,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         } catch (_error) {
           e = _error;
           console.log(e);
+          this.initialized(k);
         }
       }
     }
