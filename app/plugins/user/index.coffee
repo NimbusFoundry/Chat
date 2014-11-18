@@ -1,4 +1,4 @@
-define('users', ['require', 'core/analytic'],(require, analytic)->
+define('user', ['require', 'core/analytic'],(require, analytic)->
 	user_plugin = 	
 		_models : {}
 		title : 'Users'
@@ -14,7 +14,7 @@ define('users', ['require', 'core/analytic'],(require, analytic)->
 			@_models['user'] = {}
 			foundry.model(name, attributes,(model)->
 				self._models['user'] = model
-				foundry.initialized('users')
+				foundry.initialized('user')
 				return
 			)
 			return
@@ -404,6 +404,6 @@ inject_controller = ()->
 					</div>
 				</div>'
 
-		$templateCache.put('app/plugins/users/index.html', html)
+		$templateCache.put('app/plugins/user/index.html', html)
 	])
 

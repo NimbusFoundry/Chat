@@ -16201,7 +16201,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     return require(['core'], function(main) {
       var requirePlugins;
       self.plugins_loaded = true;
-      requirePlugins = function() {
+      require(main.names, function() {
         var dependency, key, name, plugin;
         for (key in arguments) {
           plugin = arguments[key];
@@ -16252,8 +16252,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         ]);
         console.log('plugins loaded');
         return self.plugin_load_completed();
-      };
-      return require(main.names, requirePlugins);
+      });
     });
   };
 
@@ -16275,6 +16274,10 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         location: value,
         main: 'index'
       });
+
+      if (['user','workspace','document'].indexOf(key) != -1) {
+        requirejs.undef(key);
+      };
     }
     requirejs.config({
       'packages': packages
