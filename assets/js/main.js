@@ -22369,7 +22369,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         location: value,
         main: 'index'
       });
-      if (['user', 'workspace', 'document'].indexOf(key) !== -1) {
+      if (['user', 'workspace', 'document'].indexOf(key) !== -1 && value.indexOf('core/plugins') !== 0) {
         requirejs.undef(key);
       }
     }
