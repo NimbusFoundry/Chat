@@ -16155,10 +16155,6 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     return dict;
   };
 
-  if (Nimbus.Client.GDrive.is_auth_redirected()) {
-    $("#login_buttons").addClass("redirect");
-  }
-
   core.current_user = function(callback) {
     var self;
     self = this;
@@ -16201,7 +16197,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     return require(['core'], function(main) {
       var requirePlugins;
       self.plugins_loaded = true;
-      require(main.names, function() {
+      requirePlugins = function() {
         var dependency, key, name, plugin;
         for (key in arguments) {
           plugin = arguments[key];
@@ -16252,7 +16248,8 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         ]);
         console.log('plugins loaded');
         return self.plugin_load_completed();
-      });
+      };
+      return require(main.names, requirePlugins);
     });
   };
 
@@ -16274,10 +16271,9 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
         location: value,
         main: 'index'
       });
-
-      if (['user','workspace','document'].indexOf(key) != -1) {
+      if (['user', 'workspace', 'document'].indexOf(key) !== -1) {
         requirejs.undef(key);
-      };
+      }
     }
     requirejs.config({
       'packages': packages
@@ -16379,9 +16375,6 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
     var self;
     self = this;
     return Nimbus.Auth.set_app_ready(function() {
-      if (Nimbus.Auth.authorized()) {
-        $('#login_buttons .simple_spinner').show();
-      }
       callback();
       return self.loaded = true;
     });
@@ -17239,21 +17232,7 @@ for(var p=1;g>p;p++){i=b("sha1",e),i.update(k),k=i.digest();for(var q=0;j>q;q++)
       },
       switch_callback: null,
       all_doc: function() {
-        var file, files, folders, _i, _len, _ref;
-        files = [];
-        folders = [];
-        _ref = Nimbus.realtime.app_files;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          file = _ref[_i];
-          if (file.mimeType && file.mimeType === 'application/vnd.google-apps.drive-sdk.' + Nimbus.Auth.app_id) {
-            files.push(file);
-          } else {
-            folders.push(file);
-          }
-        }
-        this._app_files = files;
-        this._app_folders = folders;
-        return this._app_files;
+        return Nimbus.realtime.app_files;
       },
       open: function(doc, callback) {
         localStorage['last_opened_workspace'] = doc.id;

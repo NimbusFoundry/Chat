@@ -209,7 +209,7 @@
         /*
         			basic settings
          */
-        $rootScope.breadcum = 'Users';
+        $rootScope.breadcum = 'Room Users';
         $rootScope.shortcut_name = 'Add User';
         current_user = foundry._current_user;
         $scope.user_permission = 'Viewer';
