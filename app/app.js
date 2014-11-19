@@ -13,7 +13,9 @@
     config.appName = 'Chat';
     config.plugins = {
       support: 'core/plugins/support',
-      chat: 'app/plugins/chat'
+      chat: 'app/plugins/chat',
+      user: 'core/plugins/user',
+      workspace: 'core/plugins/workspace'
     };
     return config;
   });
@@ -41,7 +43,7 @@
   };
 
   foundry.plugin_load_completed = function(){
-    foundry._plugins.workspaces.title = 'Manage Rooms';
+    foundry._plugins.workspace.title = 'Manage Rooms';
   }
 
   foundry.ready(function() {
