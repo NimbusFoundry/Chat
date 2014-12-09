@@ -6107,7 +6107,7 @@
           for (index in data) {
             user = data[index];
             if (user.uid === login) {
-              data.splice(index);
+              data[user.uid] = null;
               break;
             }
           }
@@ -6128,7 +6128,7 @@
           }
         }
         if (!live) {
-          data.push(login);
+          data[login.uid] = login;
         }
         return data;
       });
@@ -6260,11 +6260,28 @@
     obj.auth_callback = function() {
       return console.log('placeholder callback for auth');
     };
+
+    /*
+      process offline
+     */
+    window.onbeforeunload = function(evt) {
+      var login, workspace;
+      login = server.getAuth();
+      if (login) {
+        workspace = Nimbus.realtime.c_file.id;
+        server.child(workspace + '/live/' + login.uid).set(null, function(data) {
+          return console.log(data);
+        });
+      } else {
+        console.log('do nothing');
+      }
+      return '';
+    };
     return obj;
   })();
 
   Nimbus.Client.Firebase = (function() {
-    var client, register_user, server;
+    var client, server;
     server = {};
     client = {};
     client._setup = function() {
@@ -6300,13 +6317,27 @@
     /*
       Register user and send email
      */
-    register_user = function(email, callback) {
-      return server.createUser({
-        'email': email,
-        password: 'freethecloud'
-      }, function(data) {
-        if (callback) {
-          return callback(data);
+    client.register_user = function(email, callback) {
+      var createUrl;
+      createUrl = "https://auth.firebase.com/v2/amber-torch-4018/users?email=" + (encodeURIComponent(email)) + "&password=freethecloud&_method=POST&v=js-1.1.2&transport=json&suppress_status_codes=true";
+      window.$.ajax({
+        'url': createUrl,
+        success: function(data) {
+          if (callback) {
+            return callback(data);
+          }
+        },
+        error: function(data) {
+          var err;
+          err = {
+            error: {
+              message: 'Error happened when creating user',
+              code: 'Server Error'
+            }
+          };
+          if (callback) {
+            return callback(err);
+          }
         }
       });
     };

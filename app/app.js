@@ -37,9 +37,7 @@
   });
 
   Nimbus.Auth.authorized_callback = function() {
-    if (Nimbus.Auth.authorized()) {
-      return $("#login_buttons").addClass("redirect");
-    }
+    $("#login_buttons").addClass("redirect");
   };
 
   foundry.plugin_load_completed = function(){
@@ -49,6 +47,7 @@
   foundry.ready(function() {
     if (Nimbus.Auth.authorized()) {
       $('#loading .identity-form').slideUp('fast');
+      $("#login_buttons").addClass("redirect");
 
       foundry.init(function() {
         $('#loading').addClass('loaded');

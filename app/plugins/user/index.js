@@ -121,7 +121,7 @@
         model = this._models['user'];
         if (user.email) {
           return Nimbus.Share.add_share_user_real(user.email, function(u) {
-            var server, t;
+            var t;
             if (u.name) {
               t = model.findByAttribute('email', user.email);
               t.name = u.name;
@@ -138,12 +138,8 @@
               role: u.role
             };
             if (Nimbus.Auth.service = 'Firebase') {
-              server = Nimbus.Firebase.server;
-              server.createUser({
-                email: user.email,
-                password: 'freethecloud'
-              }, function(err) {
-                return console.log(err);
+              Nimbus.Client.Firebase.register(user.email, function(data) {
+                return console.log('data');
               });
             }
             if (callback) {

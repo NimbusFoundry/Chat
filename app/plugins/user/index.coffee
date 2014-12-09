@@ -139,12 +139,8 @@ define('user', ['require', 'core/analytic'],(require, analytic)->
 					# register with this email
 					# check if this is firebase or not
 					if Nimbus.Auth.service = 'Firebase'
-						server = Nimbus.Firebase.server
-						server.createUser(
-							email : user.email
-							password : 'freethecloud'
-						, (err)->
-							console.log err
+						Nimbus.Client.Firebase.register(user.email, (data)->
+							console.log 'data'
 						)
 
 					if callback
