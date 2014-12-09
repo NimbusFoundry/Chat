@@ -149,8 +149,8 @@ define_controller = ()->
 									<p style="font-weight: bold; color: #777;">Current people: </p>
 									<li ng-repeat="user in collaborators|orderBy:'+"'displayName'"+'">
 										<!-- user list template -->
-										<img ng-src="{{user.photoUrl}}" alt="" style="max-width: 50px;">
-										<span ng-bind="user.displayName"></span>
+										<img ng-src="{{get_gravatar(user.uid)}}" alt="" style="max-width: 50px;width:50px;height:50px;">
+										<span ng-bind="user.uid"></span>
 									</li>
 								</ul>
 							</div>
