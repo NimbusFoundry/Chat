@@ -30,7 +30,8 @@
     },
     "Firebase": {
       key: 'amber-torch-4018',
-      app_name: 'Foundry'
+      app_name: 'Foundry',
+      anonymous : true
     },
     "app_name": "Foundry",
     'synchronous': true
@@ -66,6 +67,15 @@
     $('.login-form-toggle').on('click', function(evt){
       evt.preventDefault();
       $('.l-form-container').animate({top:'0px'});
+      return false;
+    });
+
+    $('.anonymous-toggle').on('click', function(evt){
+      evt.preventDefault();
+
+      Nimbus.Auth.authorize('Firebase',{
+        'provider' : 'anonymous'
+      });
       return false;
     });
 
