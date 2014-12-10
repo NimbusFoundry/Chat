@@ -6435,9 +6435,15 @@
       1. get_user_email for password login
      */
     client.get_user_email = function() {
-      var user;
+      var email, user;
       user = server.getAuth();
-      return server.password.email;
+      email = '';
+      if (user.provider === 'password') {
+        email = user.password.email;
+      } else if (user.provider === 'anonymous') {
+        email = user.uid + '@anonymous.com';
+      }
+      return email;
     };
 
     /*
@@ -6447,7 +6453,7 @@
       var me, user;
       user = server.getAuth();
       me = {
-        email: user.password.email,
+        email: this.get_user_email(),
         pic: '',
         displayName: user.uid,
         permissionId: user.uid,

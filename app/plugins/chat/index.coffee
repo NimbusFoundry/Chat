@@ -35,6 +35,7 @@ define_controller = ()->
 				Nimbus.realtime.getCollaborators((users)->
 					# remove same user for different window -todo
 					$scope.collaborators = users
+					$scope.$apply()
 				)
 
 			# load messages
@@ -46,13 +47,18 @@ define_controller = ()->
 				$scope.me = null
 				# find me
 				Nimbus.realtime.getCollaborators((users)->
-					for user in users
+					$scope.collaborators = users
+					for uid, user of users
 						if user.isMe
 					 		$scope.me = user
 					 		break
+
+					if $scope.$$phase isnt '$digest'
+						$scope.$apply()
+					
+					return
 				)
 
-				sync_collaborators()
 				# adjust the height
 				$timeout(()->
 					# $('.list').css({'max-height': $('.chat-list').height()-160})
@@ -94,10 +100,6 @@ define_controller = ()->
 					return 'http://www.gravatar.com/avatar/'+md5(user.email)+'?d=mm'
 				else
 					return 'http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm'
-
-			# add event for user
-			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED, loadUser);
-			# Nimbus.realtime.doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT, loadUser);
 
 			$scope.load()
 

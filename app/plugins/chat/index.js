@@ -39,7 +39,8 @@
         });
         sync_collaborators = function() {
           return Nimbus.realtime.getCollaborators(function(users) {
-            return $scope.collaborators = users;
+            $scope.collaborators = users;
+            return $scope.$apply();
           });
         };
         $scope.load = function() {
@@ -48,20 +49,19 @@
           $scope.messages = messages;
           $scope.me = null;
           Nimbus.realtime.getCollaborators(function(users) {
-            var user, _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = users.length; _i < _len; _i++) {
-              user = users[_i];
+            var uid, user;
+            $scope.collaborators = users;
+            for (uid in users) {
+              user = users[uid];
               if (user.isMe) {
                 $scope.me = user;
                 break;
-              } else {
-                _results.push(void 0);
               }
             }
-            return _results;
+            if ($scope.$$phase !== '$digest') {
+              $scope.$apply();
+            }
           });
-          sync_collaborators();
           $timeout(function() {
             return $('.list').scrollTop($('.list')[0].scrollHeight);
           }, 100);
