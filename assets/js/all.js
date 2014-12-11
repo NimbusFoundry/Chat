@@ -6154,8 +6154,8 @@
             permissionId: user.uid,
             pic: '',
             displayName: user.uid,
-            name: email,
-            'email': email
+            name: Nimbus.Share.get_user_email(),
+            'email': Nimbus.Share.get_user_email()
           };
           workspace = item = {
             title: Nimbus.Auth.app_name,
