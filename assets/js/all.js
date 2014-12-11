@@ -6143,15 +6143,25 @@
       self = this;
       user = server.getAuth();
       server.child('workspaces').once('value', function(res) {
-        var data, item, path, workspace, workspaces;
+        var data, item, owner, path, workspace, workspaces;
         workspace = '';
         workspaces = [];
         data = res.val();
         if (!data) {
+          owner = {
+            role: 'Owner',
+            id: user.uid,
+            permissionId: user.uid,
+            pic: '',
+            displayName: user.uid,
+            name: email,
+            'email': email
+          };
           workspace = item = {
             title: Nimbus.Auth.app_name,
-            users: [user.uid],
-            owner: user.uid
+            users: [owner],
+            owners: [owner],
+            'mimeType': 'workspace'
           };
           path = server.child('workspaces').push(item);
           localStorage['last_opened_workspace'] = path.name();
